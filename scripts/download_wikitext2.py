@@ -5,11 +5,9 @@ We use the tokenized version (wikitext-2-v1), where rare words are already
 replaced by <unk>.
 """
 
-from pathlib import Path
-
 from datasets import load_dataset
 
-OUT_DIR = Path(__file__).resolve().parents[1] / "data" / "raw" / "wikitext-2"
+from lm.data import RAW_DIR
 
 # Hugging Face split name -> file name from the original WikiText release
 FILE_NAMES = {
@@ -21,11 +19,11 @@ FILE_NAMES = {
 
 def main():
     dataset = load_dataset("Salesforce/wikitext", "wikitext-2-v1")
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    RAW_DIR.mkdir(parents=True, exist_ok=True)
 
     for split, file_name in FILE_NAMES.items():
         rows = dataset[split]["text"]
-        path = OUT_DIR / file_name
+        path = RAW_DIR / file_name
 
         # Blank rows come through as "" with no newline, so strip the newline
         # and add it back to keep exactly one row per line.

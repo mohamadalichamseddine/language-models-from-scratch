@@ -12,6 +12,7 @@ cd language-models-from-scratch
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+python scripts/prepare_data.py   # builds data/processed/: vocabulary and token ids
 pytest
 ```
 
@@ -28,6 +29,7 @@ On Windows, the default `torch` from pip runs on CPU only. To use an NVIDIA GPU,
   !git clone https://github.com/mohamadalichamseddine/language-models-from-scratch.git
   %cd language-models-from-scratch
   !pip install -r requirements.txt
+  !python scripts/prepare_data.py
   ```
 
 ## Layout

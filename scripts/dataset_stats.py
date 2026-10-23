@@ -7,18 +7,16 @@ whitespace-separated words in each file; <eos> is not counted.
 
 import re
 from collections import Counter
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = ROOT / "data" / "raw" / "wikitext-2"
-OUT_DIR = ROOT / "results" / "data_stats"
-SPLITS = ["train", "valid", "test"]
+from lm.data import RAW_DIR, ROOT, SPLITS
+
+OUT_DIR = ROOT / "results/data_stats"
 
 
 def read_lines(split):
-    with open(DATA_DIR / f"wiki.{split}.tokens", encoding="utf-8") as f:
+    with open(RAW_DIR / f"wiki.{split}.tokens", encoding="utf-8") as f:
         return [line.rstrip("\n") for line in f]
 
 
