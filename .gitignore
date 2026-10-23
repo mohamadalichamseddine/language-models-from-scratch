@@ -1,0 +1,32 @@
+# Internal course documents (course rules: do not share outside the team)
+docs/internal/
+
+# Generated data (rebuilt by scripts from data/raw/, which is committed)
+data/processed/
+
+# Model checkpoints
+checkpoints/
+*.pt
+*.pth
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual environments and secrets
+.venv/
+venv/
+env/
+.env
+
+# Experiment trackers
+wandb/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
