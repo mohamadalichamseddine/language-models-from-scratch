@@ -1,0 +1,2 @@
+# Keep the dataset files byte-identical (LF line endings) on every OS
+data/raw/** text eol=lf
