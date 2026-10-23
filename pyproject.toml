@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "language-models-from-scratch"
+version = "0.1.0"
+description = "N-gram and Transformer language models written from scratch and compared on WikiText-2."
+requires-python = ">=3.10"
+# Dependencies are listed in requirements.txt.
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
