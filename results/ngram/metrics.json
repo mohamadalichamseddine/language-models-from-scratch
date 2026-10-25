@@ -1,0 +1,26 @@
+{
+  "1-gram": {
+    "cross_entropy_nats": 6.874823697602779,
+    "cross_entropy_bits": 9.918274055517456,
+    "perplexity": 967.604759507325,
+    "top1_accuracy": 0.058071363590417466,
+    "top5_accuracy": 0.22110215671319483,
+    "top10_accuracy": 0.317244516324674
+  },
+  "2-gram": {
+    "cross_entropy_nats": 7.610542589920561,
+    "cross_entropy_bits": 10.979692052952641,
+    "perplexity": 2019.3734922176568,
+    "top1_accuracy": 0.18400521948485155,
+    "top5_accuracy": 0.37873427492349965,
+    "top10_accuracy": 0.45965007397333285
+  },
+  "3-gram": {
+    "cross_entropy_nats": 9.398582595761857,
+    "cross_entropy_bits": 13.559288502290952,
+    "perplexity": 12071.258745391173,
+    "top1_accuracy": 0.17593707212629683,
+    "top5_accuracy": 0.3527884730250039,
+    "top10_accuracy": 0.4369940178087353
+  }
+}
