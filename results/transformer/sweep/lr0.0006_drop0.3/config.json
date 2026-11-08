@@ -1,0 +1,26 @@
+{
+  "model": "transformer",
+  "model_config": {
+    "vocab_size": 33278,
+    "context": 128,
+    "n_layers": 4,
+    "n_heads": 4,
+    "d_model": 256,
+    "dropout": 0.3
+  },
+  "training": {
+    "tokens_per_batch": 12288,
+    "max_steps": 4000,
+    "lr": 0.0006,
+    "min_lr_ratio": 0.1,
+    "warmup_steps": 200,
+    "weight_decay": 0.1,
+    "grad_clip": 1.0,
+    "eval_every": 100,
+    "patience": 5,
+    "seed": 0
+  },
+  "parameters": 11711488,
+  "train_split": "train",
+  "val_tokens_for_val_loss": 217646
+}

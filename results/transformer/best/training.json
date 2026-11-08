@@ -1,0 +1,10 @@
+{
+  "best_step": 3300,
+  "best_val_loss": 4.7302258121266085,
+  "steps": 3800,
+  "stopped_early": true,
+  "tokens_seen": 46694400,
+  "train_seconds": 640.4,
+  "device": "Tesla T4",
+  "torch_version": "2.14.1+cu130"
+}

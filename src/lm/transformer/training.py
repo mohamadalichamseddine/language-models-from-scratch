@@ -7,6 +7,7 @@ improved for `patience` evaluations in a row. The run folder gets:
 
     curves.csv      step, tokens, lr, train loss and val loss at every evaluation
     training.json   best step and val loss, steps trained, time and hardware
+    best.pt         the model at its best val loss (see lm.transformer.model)
 
 On a GPU, training uses mixed precision (float16), which is several times
 faster on Colab's T4.
@@ -114,8 +115,8 @@ def evaluate_loss(model, ids, tokens_per_batch):
     return total / (num_windows * context)
 
 
-def train(model, train_ids, val_ids, config, run_dir, checkpoint_path, device="cpu"):
-    """Train the model, log the run in run_dir and keep the best checkpoint.
+def train(model, train_ids, val_ids, config, run_dir, device="cpu"):
+    """Train the model, log the run in run_dir and keep the best model as run_dir/best.pt.
 
     Returns the summary that is also saved as run_dir/training.json.
     """
@@ -156,7 +157,7 @@ def train(model, train_ids, val_ids, config, run_dir, checkpoint_path, device="c
             if val_loss < best_val_loss:
                 best_step, best_val_loss = step, val_loss
                 evals_without_improvement = 0
-                save_checkpoint(model, checkpoint_path, step=step, val_loss=val_loss)
+                save_checkpoint(model, run_dir / "best.pt", step=step, val_loss=val_loss)
             else:
                 evals_without_improvement += 1
                 if evals_without_improvement >= config.patience:

@@ -11,19 +11,21 @@ The best run is the one with the lowest validation perplexity. At the end the
 script writes:
 
     results/transformer/sweep/sweep.md, sweep.json   every run: settings, metrics, training time
+    results/transformer/best/   a copy of the best run's folder, with its model
+        (best.pt): the Transformer later tickets use
     configs/transformer.json   the best settings, frozen for the ablation runs (T18)
     results/comparison.md, comparison.csv   n-grams at their best k, the
         interpolated trigram, and the best Transformer
 
-The best run's checkpoint, checkpoints/<best run>/best.pt (best_run in
-sweep.json), is the model later tickets use. It is the only checkpoint that
-goes into the repo; the notebook leaves the others on Google Drive.
+The model in results/transformer/best/ is the only one that goes into the
+repo; the notebook leaves the sweep runs' models on Google Drive.
 
 Needs a GPU (see notebooks/train_on_colab.ipynb):
     python scripts/sweep_transformer.py
 """
 
 import json
+import shutil
 import subprocess
 import sys
 
@@ -31,6 +33,7 @@ from lm.data import ROOT, load_split
 from lm.evaluation import RESULTS_DIR, run_name, write_table
 
 SWEEP_DIR = RESULTS_DIR / "transformer" / "sweep"
+BEST_DIR = RESULTS_DIR / "transformer" / "best"
 FROZEN_CONFIG = ROOT / "configs" / "transformer.json"
 
 CONTEXT = 128
@@ -122,6 +125,13 @@ def freeze_best_config(best):
     write_json(FROZEN_CONFIG, settings)
 
 
+def copy_best_run(best):
+    """Copy the best run's folder, model included, to results/transformer/best/."""
+    if BEST_DIR.exists():
+        shutil.rmtree(BEST_DIR)  # left over from an earlier sweep
+    shutil.copytree(RESULTS_DIR / best["run"], BEST_DIR)
+
+
 def write_comparison(best):
     """One table: each n-gram at its best k, the interpolated trigram and the best Transformer."""
     best_k = read_json(RESULTS_DIR / "ngram" / "tuning.json")["best_k"]
@@ -139,7 +149,8 @@ def main():
 
     write_sweep_table(runs, best)
     freeze_best_config(best)
-    print(f"Best run: {best['run']} (val perplexity {best['valid_perplexity']:.2f}), frozen in {FROZEN_CONFIG}\n")
+    copy_best_run(best)
+    print(f"Best run: {best['run']} (val perplexity {best['valid_perplexity']:.2f}), copied to {BEST_DIR}\n")
     write_comparison(best)
 
 

@@ -42,8 +42,7 @@ scripts/              entry points (download data, train, evaluate)
 configs/              run configurations
 notebooks/            Colab notebook for training the Transformer on a GPU
 tests/                unit tests (run with pytest)
-results/              metrics, tables and figures
-checkpoints/          trained models that later tickets need (trained on Colab)
+results/              metrics, tables, figures and the trained models later tickets need
 data/                 WikiText-2: raw text is committed, data/processed/ is generated
 docs/                 roadmap and notes
 ```

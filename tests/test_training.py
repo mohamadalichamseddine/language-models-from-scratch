@@ -65,7 +65,7 @@ def test_evaluate_loss_starts_near_uniform():
 def test_short_run_lowers_val_loss_and_logs_it(tmp_path):
     model = tiny_model(dropout=0.1)
     config = TrainingConfig(tokens_per_batch=64, max_steps=60, lr=3e-3, warmup_steps=5, eval_every=20)
-    summary = train(model, PATTERN, PATTERN[:400], config, tmp_path, tmp_path / "best.pt")
+    summary = train(model, PATTERN, PATTERN[:400], config, tmp_path)
 
     with open(tmp_path / "curves.csv") as f:
         rows = list(csv.DictReader(f))
@@ -86,7 +86,7 @@ def test_short_run_lowers_val_loss_and_logs_it(tmp_path):
 def test_training_stops_when_val_loss_stops_improving(tmp_path):
     # With a learning rate of 0 the model never changes, so the val loss never improves.
     config = TrainingConfig(tokens_per_batch=64, max_steps=100, lr=0.0, eval_every=10, patience=2)
-    summary = train(tiny_model(), PATTERN, PATTERN[:400], config, tmp_path, tmp_path / "best.pt")
+    summary = train(tiny_model(), PATTERN, PATTERN[:400], config, tmp_path)
 
     assert summary["stopped_early"]
     assert summary["steps"] == 20

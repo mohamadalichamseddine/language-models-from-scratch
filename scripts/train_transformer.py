@@ -7,9 +7,8 @@ Settings can also come from a JSON file; flags given on the command line
 override it:
     python scripts/train_transformer.py --config configs/transformer.json --run transformer/k128
 
-The run folder results/<run>/ gets config.json, curves.csv and training.json
-(see lm.transformer.training), and the best checkpoint is saved as
-checkpoints/<run>/best.pt. Score it afterwards with:
+The run folder results/<run>/ gets config.json, curves.csv, training.json and
+the best model, best.pt (see lm.transformer.training). Score it afterwards with:
     python scripts/score_transformer.py --run transformer/k128
 """
 
@@ -22,7 +21,7 @@ import torch
 
 from lm.data import load_split, load_vocab
 from lm.evaluation import RESULTS_DIR, save_config
-from lm.transformer.model import CHECKPOINTS_DIR, TransformerConfig, TransformerLM
+from lm.transformer.model import TransformerConfig, TransformerLM
 from lm.transformer.training import TrainingConfig, train
 from lm.utils import set_seed
 
@@ -53,7 +52,6 @@ def parse_args():
     parser.add_argument("--eval-tokens", type=int, help="use only the first N val tokens for the val loss (quick runs)")
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--results-dir", type=Path, default=RESULTS_DIR)
-    parser.add_argument("--checkpoint-dir", type=Path, default=CHECKPOINTS_DIR)
     args = parser.parse_args()
 
     # Settings from --config become the new defaults, then the flags are read again.
@@ -93,7 +91,7 @@ def main():
     })
 
     print(f"Training {model.num_parameters():,} parameters on {args.device}, context {model_config.context}", flush=True)
-    summary = train(model, train_ids, val_ids, training_config, run_dir, args.checkpoint_dir / args.run / "best.pt", args.device)
+    summary = train(model, train_ids, val_ids, training_config, run_dir, args.device)
 
     minutes = summary["train_seconds"] / 60
     print(f"Best val loss {summary['best_val_loss']:.4f} at step {summary['best_step']} ({minutes:.1f} min on {summary['device']})")
