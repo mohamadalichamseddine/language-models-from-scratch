@@ -1,5 +1,6 @@
 # Install from the repo root with: pip install -r requirements.txt
-numpy>=1.26
+# numpy is pinned to the version Colab uses, so results match on every machine
+numpy==2.4.6
 torch>=2.6
 datasets>=3.0
 matplotlib>=3.8

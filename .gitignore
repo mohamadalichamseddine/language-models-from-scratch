@@ -4,6 +4,9 @@ docs/internal/
 # Generated data (rebuilt by scripts from data/raw/, which is committed)
 data/processed/
 
+# Per-token prediction files (rebuilt by the scoring scripts)
+results/**/*.npz
+
 # Model checkpoints
 checkpoints/
 *.pt

@@ -4,7 +4,7 @@ Classical n-gram language models and a small decoder-only Transformer, both writ
 
 ## Setup
 
-Requires Python 3.10 or newer.
+Requires Python 3.11 or newer (Colab uses 3.13).
 
 ```bash
 git clone https://github.com/mohamadalichamseddine/language-models-from-scratch.git
