@@ -1,46 +1,39 @@
 """Score unigram, bigram and trigram models (k = 1) on the validation split.
 
-Writes one prediction file per model and results/ngram/metrics.json.
+Each model gets a run folder, results/ngram/n{n}_k1/, with its config and its
+per-token predictions. Then compute the metrics and the comparison table with:
+    python scripts/evaluate.py results/ngram/* --out results/ngram/comparison
 """
 
-import json
-
-from lm.data import ROOT, load_split, load_vocab
-from lm.metrics import metrics_from_file
+from lm.data import load_split, load_vocab
+from lm.evaluation import RESULTS_DIR, predictions_path, save_config
 from lm.ngram import NGramModel
 
-OUTPUT_DIR = ROOT / "results/ngram"
+K = 1
 
 
 def main():
     train_ids = load_split("train")
     valid_ids = load_split("valid")
-    vocab = load_vocab()
-
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    results = {}
+    vocab_size = len(load_vocab())
 
     for n in (1, 2, 3):
-        print(f"Training {n}-gram model...", flush=True)
+        print(f"Scoring the {n}-gram model...", flush=True)
 
-        model = NGramModel(n=n, vocab_size=len(vocab), k=1)
-        model.fit(train_ids)
+        run_dir = RESULTS_DIR / "ngram" / f"n{n}_k{K}"
+        save_config(run_dir, {
+            "model": "ngram",
+            "n": n,
+            "k": K,
+            "train_split": "train",
+            "vocab_size": vocab_size,
+        })
 
-        path = OUTPUT_DIR / f"ngram_{n}_k1_valid.npz"
-        model.score_split(valid_ids, path)
-
-        metrics = metrics_from_file(path)
-        results[f"{n}-gram"] = metrics
-
-        print(f"Perplexity: {metrics['perplexity']:.4f}", flush=True)
-
+        model = NGramModel(n=n, vocab_size=vocab_size, k=K).fit(train_ids)
+        model.score_split(valid_ids, predictions_path(run_dir, "valid"))
         del model
 
-    with open(OUTPUT_DIR / "metrics.json", "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2)
-
-    print(f"Results saved to {OUTPUT_DIR}")
+    print(f"Predictions saved under {RESULTS_DIR / 'ngram'}")
 
 
 if __name__ == "__main__":
