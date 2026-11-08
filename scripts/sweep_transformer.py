@@ -15,6 +15,10 @@ script writes:
     results/comparison.md, comparison.csv   n-grams at their best k, the
         interpolated trigram, and the best Transformer
 
+The best run's checkpoint, checkpoints/<best run>/best.pt (best_run in
+sweep.json), is the model later tickets use. It is the only checkpoint that
+goes into the repo; the notebook leaves the others on Google Drive.
+
 Needs a GPU (see notebooks/train_on_colab.ipynb):
     python scripts/sweep_transformer.py
 """

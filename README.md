@@ -43,6 +43,7 @@ configs/              run configurations
 notebooks/            Colab notebook for training the Transformer on a GPU
 tests/                unit tests (run with pytest)
 results/              metrics, tables and figures
+checkpoints/          trained models that later tickets need (trained on Colab)
 data/                 WikiText-2: raw text is committed, data/processed/ is generated
 docs/                 roadmap and notes
 ```

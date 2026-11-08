@@ -7,10 +7,8 @@ data/processed/
 # Per-token prediction files (rebuilt by the scoring scripts)
 results/**/*.npz
 
-# Model checkpoints
-checkpoints/
-*.pt
-*.pth
+# Model checkpoints are not ignored: the ones later tickets need (e.g. the best
+# T13 run) are committed. The other runs' checkpoints stay in Google Drive.
 
 # Python
 __pycache__/
