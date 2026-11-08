@@ -1,0 +1,7 @@
+{
+  "model": "ngram",
+  "n": 3,
+  "k": 0.01,
+  "train_split": "train",
+  "vocab_size": 33278
+}

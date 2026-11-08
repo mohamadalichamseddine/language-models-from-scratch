@@ -39,7 +39,7 @@ We compare classical n-gram language models (MLE unigram, bigram, trigram with a
 | ID | Title | Description | Depends on | Owner | Status |
 |---|---|---|---|---|---|
 | T06 | Evaluator script and comparison table | Command-line script that reads one or more runs' T04 output files, computes their metrics with the T04 module, writes `metrics.json` per run, and builds one comparison table (Markdown + CSV) across runs.<br>**Done when:** it reproduces the n-gram numbers from T05. | T04, T05 | | Done |
-| T07 | Tune add-k on validation | Grid over k (e.g. 1, 0.1, 0.01, 0.001, 0.0001) for n = 1, 2, 3. Pick the best k for each n by val perplexity and plot val perplexity against k. Also report unsmoothed MLE: the share of val tokens that get zero probability (this shows why smoothing is needed).<br>**Done when:** the chosen k values and the plot are in `results/ngram/`. | T05, T06 | | Not started |
+| T07 | Tune add-k on validation | Grid over k (e.g. 1, 0.1, 0.01, 0.001, 0.0001) for n = 1, 2, 3. Pick the best k for each n by val perplexity and plot val perplexity against k. Also report unsmoothed MLE: the share of val tokens that get zero probability (this shows why smoothing is needed).<br>**Done when:** the chosen k values and the plot are in `results/ngram/`. | T05, T06 | | Done |
 | T08 | (Optional) Interpolated trigram baseline | λ1·P_uni + λ2·P_bi + λ3·P_tri, with the λ weights tuned on val. Add-k is a weak baseline, so this gives the Transformer a stronger classical comparison.<br>**Done when:** its val metrics are in the comparison table. | T07 | | Not started |
 | T09 | Transformer model from scratch | PyTorch, without `nn.Transformer` or Hugging Face models. Components: token and learned positional embeddings, causal multi-head self-attention, GELU MLP, pre-LayerNorm residual blocks, dropout, and tied input/output embeddings. A reasonable starting size is 4 layers, 4 heads, d_model 256 (about 12M parameters, most of them in the embeddings). Tests: output shapes; changing a future token never changes earlier logits (causal mask check); parameter count printed.<br>**Done when:** tests pass. | T01 | | Not started |
 | T10 | Training data loader | Sample contiguous windows of k + 1 ids from `train.npy`: the first k are inputs and the targets are the same window shifted by one. Set batch size in tokens, so every context size sees the same number of tokens per step. Sampling is deterministic given a seed.<br>**Done when:** a unit test confirms targets are inputs shifted by one. | T03 | | Not started |
@@ -67,4 +67,4 @@ We compare classical n-gram language models (MLE unigram, bigram, trigram with a
 
 ---
 
-*Last updated: 2026-11-08 13:21 EST*
+*Last updated: 2026-11-08 13:40 EST*
