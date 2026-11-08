@@ -23,13 +23,14 @@ On Windows, the default `torch` from pip runs on CPU only. To use an NVIDIA GPU,
 ## Where things run
 
 - **Data processing and n-gram models:** any laptop; CPU is enough.
-- **Transformer training:** Google Colab with a GPU runtime (Runtime → Change runtime type → T4 GPU), because not every team laptop has an NVIDIA GPU. In a Colab notebook:
+- **Transformer training:** Open [notebooks/train_on_colab.ipynb](https://colab.research.google.com/github/mohamadalichamseddine/language-models-from-scratch/blob/main/notebooks/train_on_colab.ipynb) in Colab: it clones the repo into Google Drive (so runs survive a disconnect), runs the tests and the T13 sweep, and downloads the results.
 
-  ```
-  !git clone https://github.com/mohamadalichamseddine/language-models-from-scratch.git
-  %cd language-models-from-scratch
-  !pip install -r requirements.txt
-  !python scripts/prepare_data.py
+  The scripts also work on their own, on any machine with a GPU:
+
+  ```bash
+  python scripts/train_transformer.py --run transformer/k128 --context 128   # train, log curves, keep the best checkpoint
+  python scripts/score_transformer.py --run transformer/k128                 # score valid with a sliding window
+  python scripts/sweep_transformer.py                                        # T13: learning rate x dropout sweep
   ```
 
 ## Layout
@@ -39,6 +40,7 @@ src/lm/               shared code (data, metrics, evaluation) and the n-gram mod
 src/lm/transformer/   the Transformer
 scripts/              entry points (download data, train, evaluate)
 configs/              run configurations
+notebooks/            Colab notebook for training the Transformer on a GPU
 tests/                unit tests (run with pytest)
 results/              metrics, tables and figures
 data/                 WikiText-2: raw text is committed, data/processed/ is generated
