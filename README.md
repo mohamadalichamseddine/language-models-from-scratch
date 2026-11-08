@@ -35,13 +35,14 @@ On Windows, the default `torch` from pip runs on CPU only. To use an NVIDIA GPU,
 ## Layout
 
 ```
-src/lm/     package code (data, models, metrics)
-scripts/    entry points (download data, train, evaluate)
-configs/    run configurations
-tests/      unit tests (run with pytest)
-results/    metrics, tables and figures
-data/       WikiText-2: raw text is committed, data/processed/ is generated
-docs/       roadmap and notes
+src/lm/               shared code (data, metrics, evaluation) and the n-gram models
+src/lm/transformer/   the Transformer
+scripts/              entry points (download data, train, evaluate)
+configs/              run configurations
+tests/                unit tests (run with pytest)
+results/              metrics, tables and figures
+data/                 WikiText-2: raw text is committed, data/processed/ is generated
+docs/                 roadmap and notes
 ```
 
 Every script calls `lm.utils.set_seed` first, so runs can be repeated exactly.
