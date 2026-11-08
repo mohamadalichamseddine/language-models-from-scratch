@@ -3,6 +3,9 @@
 P(w | h) = (c(h, w) + k) / (c(h) + k * V), where h is the previous n - 1 tokens
 and V is the vocabulary size. k = 0 gives the MLE model, and a history never
 seen in train gives a uniform distribution.
+
+InterpolatedNGram mixes a unigram, a bigram and a trigram model with weights
+that sum to 1, and tune_lambdas picks those weights on held-out tokens.
 """
 
 from bisect import bisect_left
@@ -30,6 +33,7 @@ class NGramModel:
         self.unigrams = Counter()
         self.priority = None
         self._rank_cache = {}
+        self._followers_cache = {}
 
     def fit(self, train_ids):
         """Count every n-gram in the train ids and return the model."""
@@ -44,6 +48,7 @@ class NGramModel:
         self.totals.clear()
         self.unigrams = Counter(ids.tolist())
         self._rank_cache.clear()
+        self._followers_cache.clear()
 
         for i, token in enumerate(ids):
             history = tuple(ids[max(0, i - self.n + 1):i])
@@ -83,6 +88,35 @@ class NGramModel:
 
         count = self.counts[history][token]
         return (count + self.k) / (total + self.k * self.vocab_size)
+
+    def distribution(self, history=()):
+        """Return P(w | history) for every token w, as one array over the vocabulary."""
+        if self.priority is None:
+            raise RuntimeError("Model has not been fitted")
+
+        history = self._history(history)
+        total = self.totals[history]
+
+        if total == 0:
+            return np.full(self.vocab_size, 1.0 / self.vocab_size)
+
+        tokens, counts = self._followers(history)
+        denominator = total + self.k * self.vocab_size
+        probs = np.full(self.vocab_size, self.k / denominator)
+        probs[tokens] = (counts + self.k) / denominator
+        return probs
+
+    def _followers(self, history):
+        """Return the tokens seen after a history and their counts, as arrays.
+
+        Cached per history, because scoring asks for the same histories often.
+        """
+        if history not in self._followers_cache:
+            counts = self.counts[history]
+            tokens = np.fromiter(counts.keys(), dtype=np.int64, count=len(counts))
+            values = np.fromiter(counts.values(), dtype=np.float64, count=len(counts))
+            self._followers_cache[history] = (tokens, values)
+        return self._followers_cache[history]
 
     def _rank_info(self, history):
         """Return how the tokens seen after this history are ranked.
@@ -171,3 +205,71 @@ class NGramModel:
             save_predictions(path, logprob, rank)
 
         return logprob, rank
+
+
+class InterpolatedNGram:
+    """Mixes n-gram models: P(w | h) = l1 * P_uni(w) + l2 * P_bi(w | h) + l3 * P_tri(w | h)."""
+
+    def __init__(self, models, lambdas):
+        if len(models) != len(lambdas) or min(lambdas) < 0 or not np.isclose(sum(lambdas), 1):
+            raise ValueError("Need one nonnegative weight per model, and the weights must sum to 1")
+
+        self.models = models
+        self.lambdas = lambdas
+        self.context = max(model.n for model in models) - 1
+        # All models are fitted on the same train ids, so they share the unigram
+        # order that breaks rank ties.
+        self.priority = models[0].priority
+
+    def distribution(self, history=()):
+        """Return the mixed P(w | history) for every token w."""
+        return sum(weight * model.distribution(history) for weight, model in zip(self.lambdas, self.models))
+
+    def score_split(self, ids, path=None):
+        """Score every token of a split and return (logprob, rank).
+
+        Works like NGramModel.score_split: ranks are taken in the mixed
+        distribution, and ties are broken by unigram frequency in train.
+        """
+        ids = np.asarray(ids, dtype=np.int64)
+        logprob = np.empty(len(ids), dtype=np.float64)
+        rank = np.empty(len(ids), dtype=np.int64)
+
+        for i, token in enumerate(ids):
+            probs = self.distribution(ids[max(0, i - self.context):i])
+            p = probs[token]
+            logprob[i] = np.log(p) if p > 0 else -np.inf
+
+            # Tokens ahead of the target: higher probability, or the same
+            # probability and earlier in unigram order.
+            ties_before = (probs == p) & (self.priority < self.priority[token])
+            rank[i] = np.count_nonzero(probs > p) + np.count_nonzero(ties_before)
+
+        if path is not None:
+            save_predictions(path, logprob, rank)
+
+        return logprob, rank
+
+
+def tune_lambdas(part_probs, step=0.01):
+    """Pick interpolation weights for three models by perplexity on held-out tokens.
+
+    part_probs has one row per token and one column per model: the probability
+    each model gives that token. Every weight triple on a grid with this step
+    (summing to 1) is tried, and the one with the lowest perplexity wins.
+    Returns (lambdas, perplexity).
+    """
+    steps = round(1 / step)
+    best_lambdas, best_perplexity = None, np.inf
+
+    for i in range(steps + 1):
+        for j in range(steps + 1 - i):
+            lambdas = np.array([i, j, steps - i - j]) / steps
+            with np.errstate(divide="ignore"):
+                perplexity = float(np.exp(-np.mean(np.log(part_probs @ lambdas))))
+            if perplexity < best_perplexity:
+                best_lambdas, best_perplexity = lambdas, perplexity
+
+    if best_lambdas is None:
+        raise ValueError("Every choice of weights gives some token zero probability")
+    return [float(weight) for weight in best_lambdas], best_perplexity
