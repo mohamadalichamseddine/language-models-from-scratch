@@ -1,3 +1,4 @@
+from collections import Counter
 
 import numpy as np
 import pytest
@@ -57,6 +58,25 @@ def test_unseen_history_rank():
 
     assert model.rank(0, [3]) == 0
     assert model.rank(1, [3]) == 1
+
+
+@pytest.mark.parametrize("n", [1, 2, 3])
+@pytest.mark.parametrize("k", [0, 0.5])
+def test_rank_matches_full_sort(n, k):
+    # Token 5 never appears in train, and (5, 5) is a history never seen.
+    train = [0, 1, 0, 2, 0, 1, 3, 4, 1, 0, 2, 2]
+    vocab_size = 6
+    unigrams = Counter(train)
+
+    model = NGramModel(n=n, vocab_size=vocab_size, k=k)
+    model.fit(train)
+
+    for history in [(), (0,), (1, 0), (0, 2), (5, 5)]:
+        probs = [model.probability(w, history) for w in range(vocab_size)]
+        expected = sorted(range(vocab_size), key=lambda w: (-probs[w], -unigrams[w], w))
+
+        for rank, token in enumerate(expected):
+            assert model.rank(token, history) == rank
 
 
 def test_score_split(tmp_path):

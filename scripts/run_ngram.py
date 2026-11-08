@@ -1,10 +1,15 @@
+"""Score unigram, bigram and trigram models (k = 1) on the validation split.
+
+Writes one prediction file per model and results/ngram/metrics.json.
+"""
 
 import json
-from pathlib import Path
 
-from lm.data import load_split, load_vocab
+from lm.data import ROOT, load_split, load_vocab
 from lm.metrics import metrics_from_file
 from lm.ngram import NGramModel
+
+OUTPUT_DIR = ROOT / "results/ngram"
 
 
 def main():
@@ -12,8 +17,7 @@ def main():
     valid_ids = load_split("valid")
     vocab = load_vocab()
 
-    output_dir = Path("results/ngram")
-    output_dir.mkdir(parents=True, exist_ok=True)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     results = {}
 
@@ -23,7 +27,7 @@ def main():
         model = NGramModel(n=n, vocab_size=len(vocab), k=1)
         model.fit(train_ids)
 
-        path = output_dir / f"ngram_{n}_k1_valid.npz"
+        path = OUTPUT_DIR / f"ngram_{n}_k1_valid.npz"
         model.score_split(valid_ids, path)
 
         metrics = metrics_from_file(path)
@@ -33,10 +37,10 @@ def main():
 
         del model
 
-    with open(output_dir / "metrics.json", "w", encoding="utf-8") as f:
+    with open(OUTPUT_DIR / "metrics.json", "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
 
-    print(f"Results saved to {output_dir}")
+    print(f"Results saved to {OUTPUT_DIR}")
 
 
 if __name__ == "__main__":
