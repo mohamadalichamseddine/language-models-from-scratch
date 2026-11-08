@@ -22,7 +22,8 @@ import torch.nn.functional as F
 
 from lm.data import ROOT
 
-CHECKPOINTS_DIR = ROOT / "checkpoints/transformer"
+# A run's checkpoint goes to checkpoints/<run>/, next to its results in results/<run>/.
+CHECKPOINTS_DIR = ROOT / "checkpoints"
 
 
 @dataclass
