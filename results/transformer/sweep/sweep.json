@@ -1,0 +1,124 @@
+{
+  "context": 128,
+  "learning_rates": [
+    0.0003,
+    0.0006,
+    0.001
+  ],
+  "dropouts": [
+    0.1,
+    0.2,
+    0.3
+  ],
+  "best_run": "transformer/sweep/lr0.0006_drop0.1",
+  "runs": [
+    {
+      "run": "transformer/sweep/lr0.0003_drop0.1",
+      "lr": 0.0003,
+      "dropout": 0.1,
+      "valid_perplexity": 114.37934270287512,
+      "valid_top1_accuracy": 0.25224447037850456,
+      "best_step": 4000,
+      "steps": 4000,
+      "stopped_early": false,
+      "train_seconds": 670.4,
+      "device": "Tesla T4"
+    },
+    {
+      "run": "transformer/sweep/lr0.0003_drop0.2",
+      "lr": 0.0003,
+      "dropout": 0.2,
+      "valid_perplexity": 122.43916901139694,
+      "valid_top1_accuracy": 0.2433446973525817,
+      "best_step": 4000,
+      "steps": 4000,
+      "stopped_early": false,
+      "train_seconds": 677.0,
+      "device": "Tesla T4"
+    },
+    {
+      "run": "transformer/sweep/lr0.0003_drop0.3",
+      "lr": 0.0003,
+      "dropout": 0.3,
+      "valid_perplexity": 136.15379454019822,
+      "valid_top1_accuracy": 0.2326392398665723,
+      "best_step": 3900,
+      "steps": 4000,
+      "stopped_early": false,
+      "train_seconds": 675.4,
+      "device": "Tesla T4"
+    },
+    {
+      "run": "transformer/sweep/lr0.0006_drop0.1",
+      "lr": 0.0006,
+      "dropout": 0.1,
+      "valid_perplexity": 107.23525601516312,
+      "valid_top1_accuracy": 0.25481286125175745,
+      "best_step": 3300,
+      "steps": 3800,
+      "stopped_early": true,
+      "train_seconds": 640.4,
+      "device": "Tesla T4"
+    },
+    {
+      "run": "transformer/sweep/lr0.0006_drop0.2",
+      "lr": 0.0006,
+      "dropout": 0.2,
+      "valid_perplexity": 107.69580634026825,
+      "valid_top1_accuracy": 0.2536412339303272,
+      "best_step": 4000,
+      "steps": 4000,
+      "stopped_early": false,
+      "train_seconds": 674.5,
+      "device": "Tesla T4"
+    },
+    {
+      "run": "transformer/sweep/lr0.0006_drop0.3",
+      "lr": 0.0006,
+      "dropout": 0.3,
+      "valid_perplexity": 117.91279412322503,
+      "valid_top1_accuracy": 0.24254063938689432,
+      "best_step": 4000,
+      "steps": 4000,
+      "stopped_early": false,
+      "train_seconds": 674.7,
+      "device": "Tesla T4"
+    },
+    {
+      "run": "transformer/sweep/lr0.001_drop0.1",
+      "lr": 0.001,
+      "dropout": 0.1,
+      "valid_perplexity": 113.25306206651138,
+      "valid_top1_accuracy": 0.2540547494555379,
+      "best_step": 2400,
+      "steps": 2900,
+      "stopped_early": true,
+      "train_seconds": 490.1,
+      "device": "Tesla T4"
+    },
+    {
+      "run": "transformer/sweep/lr0.001_drop0.2",
+      "lr": 0.001,
+      "dropout": 0.2,
+      "valid_perplexity": 107.63892525096706,
+      "valid_top1_accuracy": 0.2569631419828529,
+      "best_step": 4000,
+      "steps": 4000,
+      "stopped_early": false,
+      "train_seconds": 675.1,
+      "device": "Tesla T4"
+    },
+    {
+      "run": "transformer/sweep/lr0.001_drop0.3",
+      "lr": 0.001,
+      "dropout": 0.3,
+      "valid_perplexity": 114.05637862876141,
+      "valid_top1_accuracy": 0.24679525467961735,
+      "best_step": 4000,
+      "steps": 4000,
+      "stopped_early": false,
+      "train_seconds": 675.3,
+      "device": "Tesla T4"
+    }
+  ]
+}

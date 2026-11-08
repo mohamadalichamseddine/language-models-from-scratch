@@ -3,9 +3,9 @@
 Example, after scripts/train_transformer.py --run transformer/k128:
     python scripts/score_transformer.py --run transformer/k128
 
-This loads checkpoints/<run>/best.pt, saves every token's log-prob and rank as
-results/<run>/<split>.npz (see lm.transformer.scoring), and adds the metrics
-to results/<run>/metrics.json. To compare it with other runs, use
+This loads the run's model, results/<run>/best.pt, saves every token's log-prob
+and rank as results/<run>/<split>.npz (see lm.transformer.scoring), and adds
+the metrics to results/<run>/metrics.json. To compare it with other runs, use
 scripts/evaluate.py.
 """
 
@@ -17,7 +17,7 @@ import torch
 
 from lm.data import EOS, SPLITS, load_split, load_vocab
 from lm.evaluation import RESULTS_DIR, evaluate_run, predictions_path
-from lm.transformer.model import CHECKPOINTS_DIR, load_checkpoint
+from lm.transformer.model import load_checkpoint
 from lm.transformer.scoring import score_split
 
 
@@ -28,13 +28,12 @@ def main():
     parser.add_argument("--batch-size", type=int, default=256, help="windows per forward pass")
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--results-dir", type=Path, default=RESULTS_DIR)
-    parser.add_argument("--checkpoint-dir", type=Path, default=CHECKPOINTS_DIR)
     args = parser.parse_args()
 
-    model = load_checkpoint(args.checkpoint_dir / args.run / "best.pt", args.device)
+    run_dir = args.results_dir / args.run
+    model = load_checkpoint(run_dir / "best.pt", args.device)
     ids = load_split(args.split)
     eos_id = load_vocab().ids[EOS]
-    run_dir = args.results_dir / args.run
 
     print(f"Scoring {len(ids):,} {args.split} tokens with context {model.config.context} on {args.device}...", flush=True)
     start = time.time()

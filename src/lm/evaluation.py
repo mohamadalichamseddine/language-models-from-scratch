@@ -7,6 +7,8 @@ results/ngram/n3_k1/, holding:
     <split>.npz     per-token predictions on a split, in the lm.metrics format
                     (not committed: rebuilt by the scoring scripts)
     metrics.json    metrics for each scored split, saved by evaluate_run()
+    best.pt         Transformer runs only: the trained model (committed only
+                    when later tickets need it, e.g. results/transformer/best/)
 """
 
 import csv

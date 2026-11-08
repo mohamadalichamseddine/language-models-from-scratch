@@ -20,11 +20,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from lm.data import ROOT
-
-# A run's checkpoint goes to checkpoints/<run>/, next to its results in results/<run>/.
-CHECKPOINTS_DIR = ROOT / "checkpoints"
-
 
 @dataclass
 class TransformerConfig:
