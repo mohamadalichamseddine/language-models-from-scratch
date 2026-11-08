@@ -1,0 +1,12 @@
+{
+  "model": "interpolated_ngram",
+  "parts": "MLE unigram, bigram and trigram (k = 0)",
+  "lambdas": [
+    0.29,
+    0.52,
+    0.19
+  ],
+  "lambda_step": 0.01,
+  "train_split": "train",
+  "vocab_size": 33278
+}
