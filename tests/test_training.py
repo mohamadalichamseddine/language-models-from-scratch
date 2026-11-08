@@ -78,8 +78,9 @@ def test_short_run_lowers_val_loss_and_logs_it(tmp_path):
     assert summary["steps"] == 60 and not summary["stopped_early"]
     assert summary["best_val_loss"] == min(float(row["val_loss"]) for row in rows)
 
+    # The saved model is the best one (up to the half-precision rounding of its weights).
     best = load_checkpoint(tmp_path / "best.pt")
-    assert evaluate_loss(best, PATTERN[:400], 64) == pytest.approx(summary["best_val_loss"])
+    assert evaluate_loss(best, PATTERN[:400], 64) == pytest.approx(summary["best_val_loss"], abs=1e-3)
 
 
 def test_training_stops_when_val_loss_stops_improving(tmp_path):

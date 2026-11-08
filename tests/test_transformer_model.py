@@ -84,7 +84,18 @@ def test_checkpoint_round_trip(tmp_path):
     save_checkpoint(model, tmp_path / "best.pt", step=7)
     loaded = load_checkpoint(tmp_path / "best.pt")
 
+    # Weights come back as float32, rounded to half precision.
+    for name, tensor in model.state_dict().items():
+        assert loaded.state_dict()[name].dtype == torch.float32
+        assert torch.equal(loaded.state_dict()[name], tensor.half().float())
+
     ids = torch.randint(0, SMALL.vocab_size, (2, 8))
     with torch.no_grad():
-        torch.testing.assert_close(loaded(ids), model(ids))
+        torch.testing.assert_close(loaded(ids), model(ids), rtol=0, atol=1e-3)
     assert torch.load(tmp_path / "best.pt")["step"] == 7
+
+
+def test_checkpoint_is_stored_at_half_precision(tmp_path):
+    save_checkpoint(small_model(), tmp_path / "best.pt")
+    weights = torch.load(tmp_path / "best.pt")["state_dict"]
+    assert all(tensor.dtype == torch.float16 for tensor in weights.values())
