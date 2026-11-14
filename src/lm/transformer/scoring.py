@@ -22,14 +22,24 @@ from lm.metrics import save_predictions
 
 
 @torch.no_grad()
-def score_split(model, ids, eos_id, batch_size=256, path=None):
+def score_split(model, ids, eos_id, batch_size=256, path=None, context=None):
     """Score every token of a split and return (logprob, rank).
 
     If path is given, the predictions are also saved in the lm.metrics format.
+    context optionally limits the visible history without changing the model's
+    trained context or weights. Positions restart at zero in each window, as
+    in full-context scoring.
     """
     model.eval()
     device = next(model.parameters()).device
-    context = model.config.context
+    context = model.config.context if context is None else context
+    if not isinstance(context, int) or not 1 <= context <= model.config.context:
+        raise ValueError("context must be between 1 and the model's trained context")
+    if not isinstance(batch_size, int) or batch_size < 1:
+        raise ValueError("batch_size must be positive")
+    ids = np.asarray(ids, dtype=np.int64)
+    if ids.ndim != 1 or len(ids) == 0:
+        raise ValueError("Scoring requires a nonempty 1D token stream")
 
     stream = torch.as_tensor(np.concatenate([[eos_id], np.asarray(ids, dtype=np.int64)]))
     targets = stream[1:]

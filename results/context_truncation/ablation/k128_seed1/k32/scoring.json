@@ -1,0 +1,22 @@
+{
+  "signature": {
+    "checkpoint_sha256": "83f44f63c81339bc42dda1772e13912aa6fa9866627de132f6c6a55b79c52c16",
+    "trained_context": 128,
+    "scoring_context": 32,
+    "split": "valid",
+    "num_tokens": 217646,
+    "data": {
+      "train_sha256": "d5163de236cc4b80fa5c2f2aa3b829899ae21d97700c96d1a459ac457e36574e",
+      "valid_sha256": "9b16c5b84685239c7af3673eb31ba6df93354547d5999780ec08a6b1f4d458b6",
+      "vocab_sha256": "3b29d858a7c2b02cc95199036534942be11939bc96c4b071ffdd223b06c2f6cf",
+      "train_tokens": 2088628,
+      "valid_tokens": 217646,
+      "vocab_size": 33278
+    },
+    "position_policy": "window-relative, starting at zero; prepended eos",
+    "scorer_sha256": "1e8a49cab7e193d0a9e2e77143c88fb4d5409008746db85979d240caf7f41442"
+  },
+  "checkpoint": "C:\\Users\\kmhai\\OneDrive\\Documents\\GitHub\\language-models-from-scratch\\results\\ablation\\k128_seed1\\best.pt",
+  "predictions_sha256": "e999f5995e4941d02a0c10d559a980881f20807cad12d68f2e3ca2d0d42241e2",
+  "torch_version": "2.14.0+rocm10.1.0"
+}

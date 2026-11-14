@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-14",
+  "training_runs": 8,
+  "training_tokens_total": 393216000,
+  "scored_outputs": 16,
+  "validation_tokens_per_output": 217646,
+  "prediction_hashes_and_metrics_verified": true,
+  "test_split_scored": false,
+  "pytest": "107 passed",
+  "full_context_repeats": [
+    {
+      "seed": 0,
+      "max_logprob_difference": 2.936317173762859e-05,
+      "rank_differences": 127,
+      "max_rank_difference": 1,
+      "perplexity_difference": 1.6066773866896256e-07,
+      "topk_accuracies_identical": true
+    },
+    {
+      "seed": 1,
+      "max_logprob_difference": 2.019474725756254e-05,
+      "rank_differences": 129,
+      "max_rank_difference": 1,
+      "perplexity_difference": 6.281746038894198e-07,
+      "topk_accuracies_identical": true
+    }
+  ]
+}
