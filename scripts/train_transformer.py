@@ -47,6 +47,7 @@ def parse_args():
     parser.add_argument("--grad-clip", type=float, default=training.grad_clip)
     parser.add_argument("--eval-every", type=int, default=training.eval_every)
     parser.add_argument("--patience", type=int, default=training.patience)
+    parser.add_argument("--early-stopping", action=argparse.BooleanOptionalAction, default=training.early_stopping)
     parser.add_argument("--seed", type=int, default=training.seed)
 
     parser.add_argument("--eval-tokens", type=int, help="use only the first N val tokens for the val loss (quick runs)")

@@ -1,0 +1,10 @@
+{
+  "best_step": 3600,
+  "best_val_loss": 4.743451699649587,
+  "steps": 4000,
+  "stopped_early": false,
+  "tokens_seen": 49152000,
+  "train_seconds": 178.2,
+  "device": "AMD Radeon RX 9070 XT",
+  "torch_version": "2.14.0+rocm10.1.0"
+}
