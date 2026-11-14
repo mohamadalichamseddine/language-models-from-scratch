@@ -1,0 +1,16 @@
+{
+  "complete_requested_grid": true,
+  "contexts": [
+    6,
+    32,
+    64,
+    128
+  ],
+  "seeds": [
+    0,
+    1
+  ],
+  "missing_runs": [],
+  "at_least_two_seeds_per_context": true,
+  "standard_deviation": "sample (ddof=1); undefined for one seed"
+}

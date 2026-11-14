@@ -1,14 +1,21 @@
-# T18-T19: context-window experiments
+# T18-T20: context-window experiments
 
-Eight equal-budget runs (two seeds at each context) were completed on
-2026-11-14 on an RX 9070 XT. Their configurations, selected checkpoints,
-training logs, and validation metrics are in `results/ablation/`.
-The test split was not scored. T19 scores both context-128 checkpoints at all four history lengths.
-T20 figures are delivered in a separate follow-up PR.
+The eight T18 runs, both-seed T19 scoring, and T20 figures were completed on
+2026-11-14 on an RX 9070 XT.
+The [validation summary](../results/figures/ablation_summary.md) reports two seeds
+at each context. Context 64 achieved the lowest mean perplexity (104.13), compared
+with 138.20, 109.19, and 107.58 at contexts 6, 32, and 128 respectively. These are
+validation results from this configuration and two seeds, not a general claim
+that context 64 is optimal. The commands below never score the test split.
 
-The [environment record](../results/ablation/environment.json) preserves
-the original experiment's package versions and source fingerprints.
-The experiments preceded the split into task-specific branches.
+T19 comparisons are saved for [seed 0](../results/context_truncation/ablation/k128_seed0/comparison.md)
+and [seed 1](../results/context_truncation/ablation/k128_seed1/comparison.md).
+Both show a large perplexity penalty when the context-128 model is restricted
+to six tokens (about 148 versus 107-108 with the full history).
+The [artifact verification](../results/ablation/validation.json) checks all 16
+prediction files and records numerical differences between repeated GPU scoring
+passes. All 107 tests passed. The [environment record](../results/ablation/environment.json)
+contains package versions, GPU details, and source fingerprints.
 
 ## Experiment protocol
 
@@ -130,8 +137,33 @@ Results go into `results/context_truncation/<source-run>/k<context>/`, with a
 comparison Markdown/CSV table in the source-run folder. Full-context predictions
 in the training folder are not overwritten.
 
-Comparisons: [seed 0](../results/context_truncation/ablation/k128_seed0/comparison.md)
-and [seed 1](../results/context_truncation/ablation/k128_seed1/comparison.md).
-The [original combined-workspace verification](../results/ablation/validation.json)
-records all 16 prediction files and the numerical differences between
-full-context scoring repeats. Its test count includes the later T20 tests.
+## T20: aggregate and plot
+
+```powershell
+python scripts/plot_ablation.py
+```
+
+The default requires all eight T18 runs and checks matching settings/data,
+completed budgets, and full-context validation scoring metadata. It writes:
+
+- `results/figures/ablation_runs.csv`: each context/seed measurement.
+- `ablation_summary.json`, `.csv`, `.md`: mean and sample standard deviation
+  across seeds, plus counts.
+- `ablation_perplexity.png`, `ablation_cross_entropy_nats.png`,
+  `ablation_top1_accuracy.png`: mean curves with SD error bars and tuned n-gram
+  reference lines. Perplexity uses a logarithmic axis.
+- `ablation_status.json`: requested grid, missing runs, and seed coverage.
+
+Perplexities are averaged across seeds directly; they are not computed by
+exponentiating mean CE. Error bars use sample SD (`ddof=1`), not standard error
+or confidence intervals. With one seed SD is undefined and is reported as `n/a`.
+
+For an explicitly partial preview in a separate directory:
+
+```powershell
+python scripts/plot_ablation.py --allow-partial --out results/figures/ablation_preview
+```
+
+Do not mark T18 or T20 Done based on a partial preview. Preserve each selected
+checkpoint for later tickets and commit the intended configs, summaries, and
+figures. Prediction arrays remain ignored and can be regenerated.

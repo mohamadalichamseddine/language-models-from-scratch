@@ -37,7 +37,7 @@ For AMD GPUs, see the [ROCm setup and verified RX 9070 XT environment](docs/cont
 
 ## Layout
 
-For T18 context-window training and scoring, follow
+For T18-T20 training, context truncation, and plots, follow
 [the context-ablation runbook](docs/context-ablation.md).
 
 ```
