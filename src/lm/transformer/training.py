@@ -40,6 +40,7 @@ class TrainingConfig:
     grad_clip: float = 1.0
     eval_every: int = 100
     patience: int = 5  # evaluations without a new best val loss before stopping
+    early_stopping: bool = True  # disable for equal-budget context ablations
     seed: int = 0
 
 
@@ -160,7 +161,7 @@ def train(model, train_ids, val_ids, config, run_dir, device="cpu"):
                 save_checkpoint(model, run_dir / "best.pt", step=step, val_loss=val_loss)
             else:
                 evals_without_improvement += 1
-                if evals_without_improvement >= config.patience:
+                if config.early_stopping and evals_without_improvement >= config.patience:
                     stopped_early = True
                     break
 

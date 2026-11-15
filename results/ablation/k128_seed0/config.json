@@ -1,0 +1,36 @@
+{
+  "model": "transformer",
+  "experiment": "T18",
+  "model_config": {
+    "context": 128,
+    "n_layers": 4,
+    "n_heads": 4,
+    "d_model": 256,
+    "dropout": 0.1,
+    "vocab_size": 33278
+  },
+  "training": {
+    "tokens_per_batch": 12288,
+    "max_steps": 4000,
+    "lr": 0.0006,
+    "min_lr_ratio": 0.1,
+    "warmup_steps": 200,
+    "weight_decay": 0.1,
+    "grad_clip": 1.0,
+    "eval_every": 100,
+    "patience": 5,
+    "early_stopping": false,
+    "seed": 0
+  },
+  "token_budget": 49152000,
+  "data": {
+    "train_sha256": "d5163de236cc4b80fa5c2f2aa3b829899ae21d97700c96d1a459ac457e36574e",
+    "valid_sha256": "9b16c5b84685239c7af3673eb31ba6df93354547d5999780ec08a6b1f4d458b6",
+    "vocab_sha256": "3b29d858a7c2b02cc95199036534942be11939bc96c4b071ffdd223b06c2f6cf",
+    "train_tokens": 2088628,
+    "valid_tokens": 217646,
+    "vocab_size": 33278
+  },
+  "train_split": "train",
+  "val_tokens_for_val_loss": 217646
+}

@@ -55,7 +55,7 @@ We compare classical n-gram language models (MLE unigram, bigram, trigram with a
 
 | ID | Title | Description | Depends on | Owner | Status |
 |---|---|---|---|---|---|
-| T18 | Context-window ablation runs | Train with k = 6, 32, 64 and 128, using the frozen T13 hyperparameters and the same token budget (tokens per step × number of steps), so differences come from context alone. Use at least 2 seeds per k if compute allows. Save best checkpoints and per-token val outputs. Runs can be split between people by k.<br>**Done when:** all runs and their configs are in `results/ablation/`. | T13 | | Not started |
+| T18 | Context-window ablation runs | Train with k = 6, 32, 64 and 128, using the frozen T13 hyperparameters and the same token budget (tokens per step × number of steps), so differences come from context alone. Use at least 2 seeds per k if compute allows. Save best checkpoints and per-token val outputs. Runs can be split between people by k.<br>**Done when:** all runs and their configs are in `results/ablation/`. | T13 | | Done |
 | T19 | (Optional) Eval-time context truncation | Score the k = 128 model with its context cut to 6, 32 and 64 tokens. This separates being trained with long context from being allowed to use it at test time, and it costs no extra training. | T12, T18 | | Not started |
 | T20 | Ablation plots | Perplexity, CE and top-1 accuracy against context size (mean ± std across seeds). Show the n-gram results as reference lines; a trigram uses 2 tokens of context.<br>**Done when:** the figures are in `results/figures/`. | T18 | | Not started |
 | T21 | Final test-set evaluation | Once every choice is frozen, score the test split once with each final model. Build a table with 95% bootstrap confidence intervals (resampling test articles or 1k-token blocks) and the std across seeds. Nothing gets tuned after this.<br>**Done when:** the final table is in `results/final/`. | T07, T18 (+ T08, T19 if done) | | Not started |
@@ -67,4 +67,4 @@ We compare classical n-gram language models (MLE unigram, bigram, trigram with a
 
 ---
 
-*Last updated: 2026-11-08 18:15 EST*
+*Last updated: 2026-11-14*

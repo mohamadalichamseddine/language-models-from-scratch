@@ -91,3 +91,14 @@ def test_training_stops_when_val_loss_stops_improving(tmp_path):
     assert summary["stopped_early"]
     assert summary["steps"] == 20
     assert summary["best_step"] == 0
+
+
+def test_fixed_budget_keeps_training_after_validation_stalls(tmp_path):
+    config = TrainingConfig(tokens_per_batch=64, max_steps=6, lr=0.0, eval_every=2,
+                            patience=1, early_stopping=False)
+    summary = train(tiny_model(), PATTERN, PATTERN[:400], config, tmp_path)
+    assert summary["steps"] == 6
+    assert summary["tokens_seen"] == 6 * 64
+    assert not summary["stopped_early"]
+    assert summary["best_step"] == 0
+    assert (tmp_path / "best.pt").exists()
