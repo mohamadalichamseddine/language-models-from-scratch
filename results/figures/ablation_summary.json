@@ -1,0 +1,58 @@
+[
+  {
+    "context": 6,
+    "n_seeds": 2,
+    "seeds": [
+      0,
+      1
+    ],
+    "perplexity_mean": 138.19553210533485,
+    "perplexity_std": 0.9783975152494736,
+    "cross_entropy_nats_mean": 4.92865705054738,
+    "cross_entropy_nats_std": 0.007079864840363883,
+    "top1_accuracy_mean": 0.2418399603025096,
+    "top1_accuracy_std": 0.00043859944800354753
+  },
+  {
+    "context": 32,
+    "n_seeds": 2,
+    "seeds": [
+      0,
+      1
+    ],
+    "perplexity_mean": 109.19270078969225,
+    "perplexity_std": 0.1065890267705183,
+    "cross_entropy_nats_mean": 4.693113980271685,
+    "cross_entropy_nats_std": 0.0009761553925070376,
+    "top1_accuracy_mean": 0.26000477840162467,
+    "top1_accuracy_std": 0.00020143085760163592
+  },
+  {
+    "context": 64,
+    "n_seeds": 2,
+    "seeds": [
+      0,
+      1
+    ],
+    "perplexity_mean": 104.13365258935389,
+    "perplexity_std": 0.41136503206507313,
+    "cross_entropy_nats_mean": 4.645671293787614,
+    "cross_entropy_nats_std": 0.003950366589038879,
+    "top1_accuracy_mean": 0.2627018185493875,
+    "top1_accuracy_std": 0.0005393148768043851
+  },
+  {
+    "context": 128,
+    "n_seeds": 2,
+    "seeds": [
+      0,
+      1
+    ],
+    "perplexity_mean": 107.57762353126195,
+    "perplexity_std": 0.2993703314294743,
+    "cross_entropy_nats_mean": 4.678210730313763,
+    "cross_entropy_nats_std": 0.002782834459417597,
+    "top1_accuracy_mean": 0.2564715179695469,
+    "top1_accuracy_std": 0.00018843531840153925
+  }
+]

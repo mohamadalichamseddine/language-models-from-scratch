@@ -1,4 +1,5 @@
 import copy
+import math
 
 import numpy as np
 import pytest
@@ -9,7 +10,9 @@ from lm.ablation import (
     read_json,
     score_checkpoint,
     train_ablation_run,
+    write_json,
 )
+from lm.ablation_plots import build_ablation_figures, collect_runs, summarize_runs
 from lm.data import ROOT, Vocab
 
 
@@ -82,3 +85,46 @@ def test_scoring_rebuilds_corrupted_predictions_and_keeps_truncation_separate(tm
     assert (run / "valid.npz").read_bytes() == restored
     assert read_json(out / "scoring.json")["signature"]["scoring_context"] == 2
     assert full  # the original full-context output was nonempty
+
+
+def test_summary_uses_sample_sd_and_marks_single_seed_unknown():
+    rows = [
+        {"context": 6, "seed": 0, "perplexity": 10, "cross_entropy_nats": 2, "top1_accuracy": 0.2},
+        {"context": 6, "seed": 1, "perplexity": 14, "cross_entropy_nats": 4, "top1_accuracy": 0.4},
+        {"context": 32, "seed": 0, "perplexity": 9, "cross_entropy_nats": 1, "top1_accuracy": 0.5},
+    ]
+    first, second = summarize_runs(rows)
+    assert first["perplexity_mean"] == 12
+    assert first["perplexity_std"] == pytest.approx(math.sqrt(8))
+    assert first["cross_entropy_nats_std"] == pytest.approx(math.sqrt(2))
+    assert first["top1_accuracy_mean"] == pytest.approx(0.3)
+    assert second["perplexity_std"] is None
+
+
+def test_plots_reject_incomplete_grid_and_label_preview(tmp_path):
+    toy_experiment(tmp_path)
+    with pytest.raises(ValueError, match="Missing runs"):
+        collect_runs(tmp_path, contexts=[6], seeds=[0, 1])
+    out = tmp_path / "figures"
+    status = build_ablation_figures(tmp_path, ROOT / "results", out, contexts=[6], seeds=[0, 1], allow_partial=True)
+    assert status["missing_runs"] == ["k6_seed1"]
+    assert not status["complete_requested_grid"]
+    assert "SD n/a" in (out / "ablation_summary.md").read_text()
+    assert len(list(out.glob("*.png"))) == 3
+
+
+def test_plots_reject_wrong_budget_and_mixed_settings(tmp_path):
+    _, first, _, _, _ = toy_experiment(tmp_path, seed=0)
+    _, second, _, _, _ = toy_experiment(tmp_path, seed=1)
+    rows, missing = collect_runs(tmp_path, contexts=[6], seeds=[0, 1])
+    assert len(rows) == 2 and not missing
+    config = read_json(second / "config.json")
+    config["training"]["lr"] *= 2
+    write_json(second / "config.json", config)
+    with pytest.raises(ValueError, match="differ beyond"):
+        collect_runs(tmp_path, contexts=[6], seeds=[0, 1])
+    summary = read_json(first / "training.json")
+    summary["tokens_seen"] -= 1
+    write_json(first / "training.json", summary)
+    with pytest.raises(ValueError, match="budget"):
+        collect_runs(tmp_path, contexts=[6], seeds=[0])
