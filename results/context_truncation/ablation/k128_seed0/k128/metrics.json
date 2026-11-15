@@ -1,0 +1,10 @@
+{
+  "valid": {
+    "cross_entropy_nats": 4.68017849292151,
+    "cross_entropy_bits": 6.752070302213045,
+    "perplexity": 107.78931048336953,
+    "top1_accuracy": 0.2563382740780901,
+    "top5_accuracy": 0.4664225393528941,
+    "top10_accuracy": 0.5480550986464259
+  }
+}

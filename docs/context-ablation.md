@@ -1,10 +1,10 @@
-# T18: context-window training experiments
+# T18-T19: context-window experiments
 
 Eight equal-budget runs (two seeds at each context) were completed on
 2026-11-14 on an RX 9070 XT. Their configurations, selected checkpoints,
 training logs, and validation metrics are in `results/ablation/`.
-The test split was not scored. T19 context truncation and T20 figures
-are delivered in separate follow-up PRs.
+The test split was not scored. T19 scores both context-128 checkpoints at all four history lengths.
+T20 figures are delivered in a separate follow-up PR.
 
 The [environment record](../results/ablation/environment.json) preserves
 the original experiment's package versions and source fingerprints.
@@ -102,3 +102,36 @@ directory for a changed experiment. If scoring runs out of memory, retry with
 For code smoke tests, pass a separate tiny JSON with `--config` and put outputs
 outside `results/ablation/` using `--out`. Do not modify the frozen T13 file to
 shorten the real experiment, and do not mix smoke outputs into the final plots.
+
+## T19: restrict the available history
+
+After the k=128 runs finish, score the same checkpoint at k=6, 32, 64, and 128:
+
+```powershell
+python scripts/score_context_truncation.py --run ablation/k128_seed0 --device cuda
+python scripts/score_context_truncation.py --run ablation/k128_seed1 --device cuda
+```
+
+For an earlier exploratory result, `--run transformer/best` uses the existing
+T13 checkpoint. Keep that comparison labeled as T13; it has a different training
+budget from T18.
+
+The scoring override changes only the visible history. It preserves the trained
+context setting, weights, and positional embedding table; positions start at zero
+within each window, as in existing scoring. All settings predict the same targets,
+including the first token through the prepended `<eos>` marker.
+
+Repeated GPU scoring can differ at floating-point rounding precision, including
+the order of nearly tied predictions. Compare numerical tolerances and aggregate
+metrics rather than requiring bitwise equality. The full-context seed-0 repeat
+changed perplexity by approximately 0.00000016 with identical top-1/5/10 accuracies.
+
+Results go into `results/context_truncation/<source-run>/k<context>/`, with a
+comparison Markdown/CSV table in the source-run folder. Full-context predictions
+in the training folder are not overwritten.
+
+Comparisons: [seed 0](../results/context_truncation/ablation/k128_seed0/comparison.md)
+and [seed 1](../results/context_truncation/ablation/k128_seed1/comparison.md).
+The [original combined-workspace verification](../results/ablation/validation.json)
+records all 16 prediction files and the numerical differences between
+full-context scoring repeats. Its test count includes the later T20 tests.

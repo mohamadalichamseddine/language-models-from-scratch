@@ -77,13 +77,15 @@ def experiment_configs(settings, contexts=CONTEXTS, seeds=SEEDS):
     return runs
 
 
-def score_checkpoint(checkpoint, out, ids, eos_id, identity, device="cpu", batch_size=256):
+def score_checkpoint(checkpoint, out, ids, eos_id, identity, context=None, device="cpu", batch_size=256):
     """Score validation into its own folder; reuse only matching, intact outputs."""
     checkpoint, out = Path(checkpoint), Path(out)
     model = load_checkpoint(checkpoint, device)
     if model.config.vocab_size != identity["vocab_size"]:
         raise ValueError("Checkpoint vocabulary size does not match the prepared data")
-    context = model.config.context
+    context = model.config.context if context is None else context
+    if not 1 <= context <= model.config.context:
+        raise ValueError("Scoring context exceeds the trained context or is nonpositive")
     signature = {
         "checkpoint_sha256": file_hash(checkpoint),
         "trained_context": model.config.context,
@@ -103,7 +105,7 @@ def score_checkpoint(checkpoint, out, ids, eos_id, identity, device="cpu", batch
         and previous.get("predictions_sha256") == file_hash(prediction)
     )
     if not reusable:
-        score_split(model, ids, eos_id, batch_size=batch_size, path=prediction)
+        score_split(model, ids, eos_id, batch_size=batch_size, path=prediction, context=context)
         write_json(record_path, {
             "signature": signature,
             "checkpoint": str(checkpoint.resolve()),

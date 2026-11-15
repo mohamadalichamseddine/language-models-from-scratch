@@ -7,6 +7,7 @@ from lm.ablation import (
     data_identity,
     experiment_configs,
     read_json,
+    score_checkpoint,
     train_ablation_run,
 )
 from lm.data import ROOT, Vocab
@@ -67,10 +68,17 @@ def test_run_reuse_checks_settings_and_data(tmp_path):
         train_ablation_run(spec, run, ids, ids[:24], vocab, {**identity, "valid_sha256": "different"})
 
 
-def test_scoring_rebuilds_corrupted_predictions(tmp_path):
+def test_scoring_rebuilds_corrupted_predictions_and_keeps_truncation_separate(tmp_path):
     spec, run, ids, vocab, identity = toy_experiment(tmp_path)
+    full = (run / "valid.npz").read_bytes()
     (run / "valid.npz").write_bytes(b"interrupted write")
     train_ablation_run(spec, run, ids, ids[:24], vocab, identity, batch_size=4)
     from lm.metrics import load_predictions
     logprob, rank = load_predictions(run / "valid.npz")
     assert len(logprob) == len(rank) == 24
+    restored = (run / "valid.npz").read_bytes()
+    out = tmp_path / "truncated"
+    score_checkpoint(run / "best.pt", out, ids[:24], vocab.ids["<eos>"], identity, context=2)
+    assert (run / "valid.npz").read_bytes() == restored
+    assert read_json(out / "scoring.json")["signature"]["scoring_context"] == 2
+    assert full  # the original full-context output was nonempty
