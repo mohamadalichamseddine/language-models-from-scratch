@@ -34,6 +34,7 @@ For AMD GPUs, see the [ROCm setup notes](docs/context-ablation.md#setup-and-devi
   python scripts/score_transformer.py --run transformer/k128                 # score valid with a sliding window
   python scripts/sweep_transformer.py                                        # T13: learning rate x dropout sweep
   ```
+- **Final test-set evaluation (T21):** Open [notebooks/final_test_on_colab.ipynb](https://colab.research.google.com/github/mohamadalichamseddine/language-models-from-scratch/blob/main/notebooks/final_test_on_colab.ipynb) in Colab (about 25 minutes on a T4), or run `python scripts/final_evaluation.py` on any machine (about 2 hours on a CPU). It scores the test split once with every final model and writes the table with 95% bootstrap confidence intervals to `results/final/`.
 
 ## Layout
 
