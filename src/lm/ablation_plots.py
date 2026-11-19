@@ -6,6 +6,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.ticker import PercentFormatter
 
 from lm.ablation import CONTEXTS, SEEDS, read_json, write_json
 
@@ -14,6 +15,8 @@ METRICS = {
     "cross_entropy_nats": "Cross-entropy (nats/token)",
     "top1_accuracy": "Top-1 accuracy",
 }
+TRANSFORMER_COLOR = "#2a78d6"
+BASELINE_COLORS = ("#eb6834", "#1b8c5a", "#8b5cb6", "#777777")
 
 
 def collect_runs(root, contexts=CONTEXTS, seeds=SEEDS, allow_partial=False):
@@ -124,32 +127,42 @@ def build_ablation_figures(root, results_dir, out, contexts=CONTEXTS, seeds=SEED
         lines += ["", "Missing runs: " + ", ".join(missing)]
     (out / "ablation_summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     for metric, label in METRICS.items():
-        fig, ax = plt.subplots(figsize=(8, 5))
-        x = [row["context"] for row in summaries]
-        means = [row[f"{metric}_mean"] for row in summaries]
-        ax.plot(x, means, "o-", color="#2a78d6", label="Transformer (trained at each context)")
-        multiple = [row for row in summaries if row["n_seeds"] > 1]
-        if multiple:
-            ax.errorbar([row["context"] for row in multiple], [row[f"{metric}_mean"] for row in multiple],
-                        yerr=[row[f"{metric}_std"] for row in multiple], fmt="none", capsize=4, color="#2a78d6")
-        for row in summaries:
-            ax.annotate(f"n={row['n_seeds']}", (row["context"], row[f"{metric}_mean"]),
-                        xytext=(0, 9), textcoords="offset points", ha="center", fontsize=8)
-        for (name, values), color in zip(baselines, ("#eb6834", "#1b8c5a", "#8b5cb6", "#777777")):
-            ax.axhline(values[metric], linestyle="--", linewidth=1, color=color, label=name)
-        ax.set_xticks(sorted(contexts))
-        ax.set_xlabel("Training and scoring context (tokens)")
-        ax.set_ylabel(label)
+        # Left: the Transformer next to the n-gram reference lines. Right: the
+        # Transformer alone, zoomed in, because the n-gram lines stretch the
+        # left axis so far that the differences between contexts are hard to see.
+        fig, (full, zoom) = plt.subplots(1, 2, figsize=(13, 5))
+        for ax in (full, zoom):
+            _plot_transformer(ax, summaries, metric)
+            ax.set_xticks(sorted(contexts))
+            ax.set_xlabel("Training and scoring context (tokens)")
+            ax.set_ylabel(label)
+            if metric == "top1_accuracy":
+                ax.yaxis.set_major_formatter(PercentFormatter(1.0))
+            ax.margins(y=0.12)
+            ax.grid(alpha=0.2)
+        for (name, values), color in zip(baselines, BASELINE_COLORS):
+            full.axhline(values[metric], linestyle="--", linewidth=1, color=color, label=name)
         if metric == "perplexity":
-            ax.set_yscale("log")
-        if metric == "top1_accuracy":
-            from matplotlib.ticker import PercentFormatter
-            ax.yaxis.set_major_formatter(PercentFormatter(1.0))
-        ax.set_title("Validation context ablation" + (" (partial grid)" if missing else ""))
-        ax.margins(y=0.12)
-        ax.grid(alpha=0.2)
-        ax.legend(fontsize=8, framealpha=1.0)
+            full.set_yscale("log")
+        full.set_title("With n-gram reference lines")
+        zoom.set_title("Transformer only (zoomed in)")
+        full.legend(fontsize=8, framealpha=1.0)
+        fig.suptitle("Validation context ablation" + (" (partial grid)" if missing else ""))
         fig.tight_layout()
         fig.savefig(out / f"ablation_{metric}.png", dpi=150)
         plt.close(fig)
     return status
+
+
+def _plot_transformer(ax, summaries, metric):
+    """Draw the Transformer's mean at each context, with SD error bars where there are several seeds."""
+    x = [row["context"] for row in summaries]
+    means = [row[f"{metric}_mean"] for row in summaries]
+    ax.plot(x, means, "o-", color=TRANSFORMER_COLOR, label="Transformer (trained at each context)")
+    multiple = [row for row in summaries if row["n_seeds"] > 1]
+    if multiple:
+        ax.errorbar([row["context"] for row in multiple], [row[f"{metric}_mean"] for row in multiple],
+                    yerr=[row[f"{metric}_std"] for row in multiple], fmt="none", capsize=4, color=TRANSFORMER_COLOR)
+    for row in summaries:
+        ax.annotate(f"n={row['n_seeds']}", (row["context"], row[f"{metric}_mean"]),
+                    xytext=(0, 9), textcoords="offset points", ha="center", fontsize=8)

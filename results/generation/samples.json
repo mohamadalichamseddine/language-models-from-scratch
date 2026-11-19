@@ -21660,7 +21660,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -21900,7 +21900,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -22140,7 +22140,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -22380,7 +22380,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -22620,7 +22620,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -22860,7 +22860,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -23100,7 +23100,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -23340,7 +23340,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -23580,7 +23580,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -23820,7 +23820,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -24060,7 +24060,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -24300,7 +24300,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -24540,7 +24540,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -24780,7 +24780,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -25020,7 +25020,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -25260,7 +25260,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -25500,7 +25500,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -25740,7 +25740,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -25980,7 +25980,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -26220,7 +26220,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -26460,7 +26460,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -26700,7 +26700,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -26940,7 +26940,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -27180,7 +27180,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -27420,7 +27420,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -27660,7 +27660,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -27900,7 +27900,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -28140,7 +28140,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -28380,7 +28380,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     },
     {
@@ -28620,7 +28620,7 @@
         "temperature": 1.0,
         "top_k": 50,
         "num_tokens": 100,
-        "checkpoint": "C:\\Users\\Owner\\Desktop\\language-models-from-scratch-main\\language-models-from-scratch-main\\language-models-from-scratch\\results\\transformer\\best\\best.pt"
+        "checkpoint": "results/transformer/best/best.pt"
       }
     }
   ]

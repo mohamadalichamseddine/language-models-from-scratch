@@ -1,9 +1,8 @@
 
 """Reproducible free-running generation and diversity metrics."""
 
-from collections import Counter
-
 import numpy as np
+import torch
 
 
 def select_prompts(ids, count=30, prompt_length=10, seed=42):
@@ -54,30 +53,37 @@ def generate_ngram(model, prompt_ids, length, seed):
     return output
 
 
-def generate_transformer(model, prompt_ids, length, seed, temperature=1.0, top_k=50):
-    import torch
+def generate_transformer(model, prompts, length, seeds, temperature=1.0, top_k=50):
+    """Continue every prompt by `length` tokens with temperature + top-k sampling.
 
+    The prompts are generated together in one batch, so they must all have the
+    same length. Prompt i samples with its own generator, seeded with seeds[i]
+    and kept on the CPU, so the samples are the same on any device (given the
+    same logits). Returns the generated tokens of each prompt.
+    """
     if temperature <= 0 or not np.isfinite(temperature) or top_k < 1:
         raise ValueError("Invalid sampling temperature or top_k")
-    if not prompt_ids:
-        raise ValueError("Prompt cannot be empty")
+    if not prompts or len({len(prompt) for prompt in prompts}) != 1 or not prompts[0]:
+        raise ValueError("Prompts must be nonempty and all of the same length")
+    if len(seeds) != len(prompts):
+        raise ValueError("Give one seed per prompt")
+
     device = next(model.parameters()).device
-    # CPU RNG ensures identical sampling streams on CPU/GPU (given identical logits).
-    rng = torch.Generator(device="cpu").manual_seed(int(seed))
-    context = list(prompt_ids)
-    output = []
+    generators = [torch.Generator(device="cpu").manual_seed(int(seed)) for seed in seeds]
+    contexts = [list(prompt) for prompt in prompts]
+
     model.eval()
     with torch.inference_mode():
         for _ in range(length):
-            window = context[-model.config.context:]
-            logits = model.next_token_logits(torch.tensor([window], dtype=torch.long, device=device))[0]
-            values, indices = torch.topk(logits / temperature, min(top_k, logits.numel()))
-            probabilities = torch.softmax(values.float().cpu(), dim=-1)
-            selection = torch.multinomial(probabilities, 1, generator=rng).item()
-            token = int(indices[selection].item())
-            output.append(token)
-            context.append(token)
-    return output
+            windows = torch.tensor([context[-model.config.context:] for context in contexts], device=device)
+            logits = model.next_token_logits(windows)
+            values, indices = torch.topk(logits / temperature, min(top_k, logits.size(-1)), dim=-1)
+            probs = torch.softmax(values.float().cpu(), dim=-1)
+            for i, context in enumerate(contexts):
+                choice = torch.multinomial(probs[i], 1, generator=generators[i]).item()
+                context.append(int(indices[i, choice]))
+
+    return [context[len(prompt):] for context, prompt in zip(contexts, prompts)]
 
 
 def generation_metrics(ids):

@@ -12,10 +12,11 @@ T19 comparisons are saved for [seed 0](../results/context_truncation/ablation/k1
 and [seed 1](../results/context_truncation/ablation/k128_seed1/comparison.md).
 Both show a large perplexity penalty when the context-128 model is restricted
 to six tokens (about 148 versus 107-108 with the full history).
-The [artifact verification](../results/ablation/validation.json) checks all 16
-prediction files and records numerical differences between repeated GPU scoring
-passes. All 107 tests passed. The [environment record](../results/ablation/environment.json)
-contains package versions, GPU details, and source fingerprints.
+Each run's `training.json` records the GPU and PyTorch version used for
+training, and each `scoring.json` records the checkpoint, data and scorer
+fingerprints behind its scores. Re-scoring both k=6 checkpoints, and the k=128
+model restricted to six tokens, on a CPU reproduced the committed metrics to
+within 2e-6 in perplexity, with top-1 accuracy changing by at most one token.
 
 ## Experiment protocol
 
@@ -56,18 +57,15 @@ GPU, OS, Python, runtime, and driver combination from the
 and [AMD PyTorch installation instructions](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html).
 Installing the Python packages does not update the graphics driver.
 
-On the development machine, the RX 9070 XT was verified on 2026-11-14 using
-Python 3.12 and `torch==2.14.0+rocm10.1.0`. After installing the repository's
-requirements, the AMD wheel was installed into `.venv` with:
+For example, the T18 runs used an RX 9070 XT (gfx1201) with Python 3.12 and
+this wheel, installed into `.venv` after the repository's requirements:
 
 ```powershell
 python -m pip install --index-url https://stable.repo.amd.com/rocm/whl-next/ "torch[device-gfx1201]==2.14.0+rocm10.1.0"
 ```
 
-The device check listed the integrated graphics at index 0 and the RX 9070 XT
-at index 1. **Use `--device cuda:1` on this machine** in the commands below.
-A five-step full-size-model training smoke test and scoring at all four contexts
-passed on that device. Other machines may expose a different device order.
+If the device check also lists integrated graphics, the discrete GPU may not
+be at index 0; pass it explicitly, for example `--device cuda:1`.
 
 Use the CPU for unit tests and small smoke runs. Full training should use a
 working GPU runtime. If several GPUs are exposed, select the intended device
