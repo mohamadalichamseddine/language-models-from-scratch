@@ -14,9 +14,9 @@
       "vocab_size": 33278
     },
     "position_policy": "window-relative, starting at zero; prepended eos",
-    "scorer_sha256": "1e8a49cab7e193d0a9e2e77143c88fb4d5409008746db85979d240caf7f41442"
+    "scorer_sha256": "b85be4259f984e59eaeeeb297bb7712e7994d8e636eb21760608334ac53e4c39"
   },
-  "checkpoint": "C:\\Users\\kmhai\\OneDrive\\Documents\\GitHub\\language-models-from-scratch\\results\\ablation\\k64_seed0\\best.pt",
+  "checkpoint": "results/ablation/k64_seed0/best.pt",
   "predictions_sha256": "f3c4a2ddd3e3ecf70a9f4e46f64d0e8840110408ce930989ea4c6c8e1bc0f581",
   "torch_version": "2.14.0+rocm10.1.0"
 }

@@ -31,7 +31,7 @@ def build_table(samples_path, out):
     ]
 
     out = Path(out)
-    out.parent.mkdir(parents=True, exist_ok=True)
+    out.mkdir(parents=True, exist_ok=True)
 
     with (out / "metrics.csv").open(
         "w", newline="", encoding="utf-8"

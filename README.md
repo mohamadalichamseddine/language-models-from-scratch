@@ -20,7 +20,7 @@ pytest
 
 On Windows, the default `torch` from pip runs on CPU only. To use an NVIDIA GPU, first install torch with the command from [pytorch.org](https://pytorch.org/get-started/locally/), then run `pip install -r requirements.txt`.
 
-For AMD GPUs, see the [ROCm setup and verified RX 9070 XT environment](docs/context-ablation.md#setup-and-device-check).
+For AMD GPUs, see the [ROCm setup notes](docs/context-ablation.md#setup-and-device-check).
 
 ## Where things run
 
@@ -52,4 +52,4 @@ data/                 WikiText-2: raw text is committed, data/processed/ is gene
 docs/                 roadmap and notes
 ```
 
-Training uses `lm.utils.set_seed`; batch sampling and generation use explicitly seeded generators. Runs save their settings, but hardware and runtime differences can still produce small numerical differences. See the [context-ablation runbook](docs/context-ablation.md) for the recorded environment and reproducibility checks.
+Training uses `lm.utils.set_seed`; batch sampling and generation use explicitly seeded generators. Runs save their settings, but hardware and runtime differences can still produce small numerical differences. See the [context-ablation runbook](docs/context-ablation.md) for how much repeated scoring differs across runs and devices.

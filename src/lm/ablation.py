@@ -12,7 +12,7 @@ from lm.evaluation import evaluate_run, predictions_path, save_config
 from lm.transformer.model import TransformerConfig, TransformerLM, load_checkpoint
 from lm.transformer.scoring import score_split
 from lm.transformer.training import TrainingConfig, train
-from lm.utils import set_seed
+from lm.utils import repo_path, set_seed
 
 CONTEXTS = (6, 32, 64, 128)
 SEEDS = (0, 1)
@@ -31,6 +31,17 @@ def write_json(path, value):
 def file_hash(path):
     with open(path, "rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def source_hash(path):
+    """Hash a source file with its line endings normalized.
+
+    Git checks out text files with CRLF line endings on Windows and LF on
+    Linux or Colab, so hashing the raw bytes would give the same code two
+    different hashes.
+    """
+    source = Path(path).read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(source).hexdigest()
 
 
 def data_identity(train_ids, valid_ids, vocab):
@@ -94,7 +105,7 @@ def score_checkpoint(checkpoint, out, ids, eos_id, identity, context=None, devic
         "num_tokens": len(ids),
         "data": identity,
         "position_policy": "window-relative, starting at zero; prepended eos",
-        "scorer_sha256": file_hash(Path(__file__).parent / "transformer/scoring.py"),
+        "scorer_sha256": source_hash(Path(__file__).parent / "transformer/scoring.py"),
     }
     record_path = out / "scoring.json"
     prediction = predictions_path(out, "valid")
@@ -108,7 +119,7 @@ def score_checkpoint(checkpoint, out, ids, eos_id, identity, context=None, devic
         score_split(model, ids, eos_id, batch_size=batch_size, path=prediction, context=context)
         write_json(record_path, {
             "signature": signature,
-            "checkpoint": str(checkpoint.resolve()),
+            "checkpoint": repo_path(checkpoint),
             "predictions_sha256": file_hash(prediction),
             "torch_version": str(torch.__version__),
         })
