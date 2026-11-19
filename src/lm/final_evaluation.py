@@ -56,12 +56,21 @@ def ngram_runs(results_dir):
             for n, name in NGRAMS.items()]
 
 
-def final_rows(results_dir):
-    """The rows of the final table, as (row name, the run folders it averages)."""
+def model_rows(results_dir):
+    """One row per trained model, as (row name, the run folders it averages).
+
+    These are the n-grams and the Transformer at each training context.
+    """
     rows = [(f"{name} (k={k:g})", [run_dir]) for name, _, k, run_dir in ngram_runs(results_dir)]
     rows.append(("interpolated trigram", [results_dir / "ngram/interpolated"]))
     for context in CONTEXTS:
         rows.append((f"Transformer k={context}", [ablation_dir(results_dir, context, seed) for seed in SEEDS]))
+    return rows
+
+
+def final_rows(results_dir):
+    """The rows of the final table: every trained model, then the T19 shorter-context scorings."""
+    rows = model_rows(results_dir)
     for context in TRUNCATED_CONTEXTS:
         rows.append((f"Transformer k=128, scored at k={context}",
                      [truncation_dir(results_dir, seed, context) for seed in SEEDS]))
@@ -131,6 +140,15 @@ def score_ngrams(results_dir, train_ids, test_ids, vocab_size):
                                        "seconds": round(time.time() - start, 1)}
     evaluate_run(run_dir, "test", len(test_ids))
     return records
+
+
+def load_test_predictions(run_dir):
+    """Load the test predictions a final run saved in T21, as (logprob, rank)."""
+    path = predictions_path(run_dir, "test")
+    if not path.exists():
+        raise FileNotFoundError(f"{path} is missing: unzip results/t21_results.zip from the repo root, "
+                                "or run scripts/final_evaluation.py")
+    return load_predictions(path)
 
 
 def bootstrap_resamples(num_tokens, seed=0):
