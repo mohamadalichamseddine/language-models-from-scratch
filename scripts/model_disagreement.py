@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 from lm.data import SPLITS, load_split, load_vocab
-from lm.disagreement import top_disagreements
+from lm.disagreement import format_row, top_disagreements
 
 
 def main():
@@ -35,8 +35,8 @@ def main():
     rows = top_disagreements(args.a, args.b, load_split(args.split), load_vocab(), args.top, args.context)
     for group, heading in (("a_wins", "MODEL A BEATS MODEL B"), ("b_wins", "MODEL B BEATS MODEL A")):
         print(f"\n{heading} (A - B log-prob):")
-        for r in rows[group]:
-            print(f"[{r['position']}] {r['a_minus_b']:+.4f}: ... {r['context_before']} [ {r['token']} ] {r['context_after']} ...")
+        for row in rows[group]:
+            print(format_row(row))
 
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
