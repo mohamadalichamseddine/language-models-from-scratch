@@ -1,0 +1,54 @@
+{
+  "split": "test",
+  "test_tokens": 245569,
+  "test_sha256": "66a09df53e4ff74fcf7984bc98b0db3bba8623c475a46aad72b39ac065464651",
+  "bootstrap": {
+    "block_tokens": 1000,
+    "blocks": 246,
+    "resamples": 10000,
+    "seed": 0,
+    "interval": "95% percentile"
+  },
+  "rows": {
+    "unigram (k=0.0001)": [
+      "results/ngram/n1_k0.0001"
+    ],
+    "bigram (k=0.003)": [
+      "results/ngram/n2_k0.003"
+    ],
+    "trigram (k=0.001)": [
+      "results/ngram/n3_k0.001"
+    ],
+    "interpolated trigram": [
+      "results/ngram/interpolated"
+    ],
+    "Transformer k=6": [
+      "results/ablation/k6_seed0",
+      "results/ablation/k6_seed1"
+    ],
+    "Transformer k=32": [
+      "results/ablation/k32_seed0",
+      "results/ablation/k32_seed1"
+    ],
+    "Transformer k=64": [
+      "results/ablation/k64_seed0",
+      "results/ablation/k64_seed1"
+    ],
+    "Transformer k=128": [
+      "results/ablation/k128_seed0",
+      "results/ablation/k128_seed1"
+    ],
+    "Transformer k=128, scored at k=6": [
+      "results/context_truncation/ablation/k128_seed0/k6",
+      "results/context_truncation/ablation/k128_seed1/k6"
+    ],
+    "Transformer k=128, scored at k=32": [
+      "results/context_truncation/ablation/k128_seed0/k32",
+      "results/context_truncation/ablation/k128_seed1/k32"
+    ],
+    "Transformer k=128, scored at k=64": [
+      "results/context_truncation/ablation/k128_seed0/k64",
+      "results/context_truncation/ablation/k128_seed1/k64"
+    ]
+  }
+}

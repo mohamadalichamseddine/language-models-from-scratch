@@ -1,0 +1,130 @@
+{
+  "results/ablation/k6_seed0": {
+    "checkpoint": "results/ablation/k6_seed0/best.pt",
+    "checkpoint_sha256": "d9b35d45917f2e6254497a17268fd214ed018e6a9dc18e04c085764d74766b68",
+    "scoring_context": 6,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 11.0
+  },
+  "results/ablation/k6_seed1": {
+    "checkpoint": "results/ablation/k6_seed1/best.pt",
+    "checkpoint_sha256": "db4ccd91939448f9c66219a2396d83f524a033a5373d6c3eef2c34468c924149",
+    "scoring_context": 6,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 9.8
+  },
+  "results/ablation/k32_seed0": {
+    "checkpoint": "results/ablation/k32_seed0/best.pt",
+    "checkpoint_sha256": "ce8cf1be5a199e8afc55c925c7388d69db84048c718f5d796f1b477b7ff310ab",
+    "scoring_context": 32,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 24.0
+  },
+  "results/ablation/k32_seed1": {
+    "checkpoint": "results/ablation/k32_seed1/best.pt",
+    "checkpoint_sha256": "ed330079b280cf71fe4ee768c0837ca0468da501c54af92442d1cf3081e6d87b",
+    "scoring_context": 32,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 24.5
+  },
+  "results/ablation/k64_seed0": {
+    "checkpoint": "results/ablation/k64_seed0/best.pt",
+    "checkpoint_sha256": "8f2107321f089fab56a9f8601af93bf4c7a4a4f1c088e847313ea481c4ac3fc7",
+    "scoring_context": 64,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 43.3
+  },
+  "results/ablation/k64_seed1": {
+    "checkpoint": "results/ablation/k64_seed1/best.pt",
+    "checkpoint_sha256": "e77b753a02bdaafe4cf9cf2e25997142d6c69bf40439929b27a94274d4492bcc",
+    "scoring_context": 64,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 44.4
+  },
+  "results/ablation/k128_seed0": {
+    "checkpoint": "results/ablation/k128_seed0/best.pt",
+    "checkpoint_sha256": "d6175eb9353b9ee565af30497eb62f5e6e4afd402e787025b46759fe80e435f8",
+    "scoring_context": 128,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 89.5
+  },
+  "results/ablation/k128_seed1": {
+    "checkpoint": "results/ablation/k128_seed1/best.pt",
+    "checkpoint_sha256": "83f44f63c81339bc42dda1772e13912aa6fa9866627de132f6c6a55b79c52c16",
+    "scoring_context": 128,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 89.5
+  },
+  "results/context_truncation/ablation/k128_seed0/k6": {
+    "checkpoint": "results/ablation/k128_seed0/best.pt",
+    "checkpoint_sha256": "d6175eb9353b9ee565af30497eb62f5e6e4afd402e787025b46759fe80e435f8",
+    "scoring_context": 6,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 10.2
+  },
+  "results/context_truncation/ablation/k128_seed0/k32": {
+    "checkpoint": "results/ablation/k128_seed0/best.pt",
+    "checkpoint_sha256": "d6175eb9353b9ee565af30497eb62f5e6e4afd402e787025b46759fe80e435f8",
+    "scoring_context": 32,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 26.0
+  },
+  "results/context_truncation/ablation/k128_seed0/k64": {
+    "checkpoint": "results/ablation/k128_seed0/best.pt",
+    "checkpoint_sha256": "d6175eb9353b9ee565af30497eb62f5e6e4afd402e787025b46759fe80e435f8",
+    "scoring_context": 64,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 45.0
+  },
+  "results/context_truncation/ablation/k128_seed1/k6": {
+    "checkpoint": "results/ablation/k128_seed1/best.pt",
+    "checkpoint_sha256": "83f44f63c81339bc42dda1772e13912aa6fa9866627de132f6c6a55b79c52c16",
+    "scoring_context": 6,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 10.2
+  },
+  "results/context_truncation/ablation/k128_seed1/k32": {
+    "checkpoint": "results/ablation/k128_seed1/best.pt",
+    "checkpoint_sha256": "83f44f63c81339bc42dda1772e13912aa6fa9866627de132f6c6a55b79c52c16",
+    "scoring_context": 32,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 25.9
+  },
+  "results/context_truncation/ablation/k128_seed1/k64": {
+    "checkpoint": "results/ablation/k128_seed1/best.pt",
+    "checkpoint_sha256": "83f44f63c81339bc42dda1772e13912aa6fa9866627de132f6c6a55b79c52c16",
+    "scoring_context": 64,
+    "device": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "seconds": 45.0
+  },
+  "results/ngram/n1_k0.0001": {
+    "model": "unigram, add-k with k=0.0001",
+    "seconds": 4.5
+  },
+  "results/ngram/n2_k0.003": {
+    "model": "bigram, add-k with k=0.003",
+    "seconds": 8.7
+  },
+  "results/ngram/n3_k0.001": {
+    "model": "trigram, add-k with k=0.001",
+    "seconds": 11.4
+  },
+  "results/ngram/interpolated": {
+    "model": "interpolated trigram, weights [0.29, 0.52, 0.19]",
+    "seconds": 128.5
+  }
+}

@@ -7,6 +7,10 @@ data/processed/
 # Per-token prediction files (rebuilt by the scoring scripts)
 results/**/*.npz
 
+# Colab result downloads, e.g. t21_results.zip, which holds the T21 test
+# predictions that T22 and T23 need (rebuilt by scripts/final_evaluation.py)
+results/*.zip
+
 # Trained models (results/<run>/best.pt) are not ignored: the ones later tickets
 # need (e.g. results/transformer/best/) are committed. The others stay in Google Drive.
 

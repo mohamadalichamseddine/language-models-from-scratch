@@ -6,5 +6,13 @@
     "top1_accuracy": 0.2539352894149215,
     "top5_accuracy": 0.4633073890629738,
     "top10_accuracy": 0.5449583268242927
+  },
+  "test": {
+    "cross_entropy_nats": 4.668738623924713,
+    "cross_entropy_bits": 6.735566059942947,
+    "perplexity": 106.56324129894874,
+    "top1_accuracy": 0.25879895263652986,
+    "top5_accuracy": 0.468226852737927,
+    "top10_accuracy": 0.5510182474172228
   }
 }
