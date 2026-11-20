@@ -11,6 +11,10 @@ results/**/*.npz
 # predictions that T22 and T23 need (rebuilt by scripts/final_evaluation.py)
 results/*.zip
 
+# Rebuilt source bundle and machine-specific reproduction log
+results/reproducibility/source_bundle.txt
+results/reproducibility/run_all.json
+
 # Trained models (results/<run>/best.pt) are not ignored: the ones later tickets
 # need (e.g. results/transformer/best/) are committed. The others stay in Google Drive.
 

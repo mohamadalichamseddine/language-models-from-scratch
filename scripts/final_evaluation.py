@@ -17,7 +17,7 @@ import torch
 from lm.ablation import data_identity, read_json, write_json
 from lm.data import EOS, load_split, load_vocab
 from lm.evaluation import RESULTS_DIR
-from lm.final_evaluation import build_final_table, score_ngrams, score_transformers
+from lm.final_evaluation import BLOCK_TOKENS, RESAMPLES, build_final_table, score_ngrams, score_transformers, write_final_table
 
 
 def main():
@@ -26,7 +26,16 @@ def main():
     parser.add_argument("--batch-size", type=int, default=256, help="Transformer windows per forward pass")
     parser.add_argument("--results-dir", type=Path, default=RESULTS_DIR)
     parser.add_argument("--out", type=Path, default=RESULTS_DIR / "final")
+    parser.add_argument("--report-only", action="store_true", help="render the saved final.json summaries without test scoring")
     args = parser.parse_args()
+
+    if args.report_only:
+        source = args.results_dir / "final"
+        config = read_json(source / "config.json")
+        if config["bootstrap"]["block_tokens"] != BLOCK_TOKENS or config["bootstrap"]["resamples"] != RESAMPLES:
+            raise ValueError("Saved bootstrap settings differ from the report's protocol")
+        print(write_final_table(read_json(source / "final.json"), args.out, config["test_tokens"]))
+        return
 
     vocab = load_vocab()
     train_ids, valid_ids, test_ids = load_split("train"), load_split("valid"), load_split("test")
