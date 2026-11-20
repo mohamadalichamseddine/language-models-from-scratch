@@ -222,12 +222,18 @@ def build_final_table(results_dir, out, test_ids, seed=0):
         "rows": {name: [repo_path(run_dir) for run_dir in run_dirs] for name, run_dirs in final_rows(results_dir)},
     })
     write_json(out / "final.json", rows)
+    return write_final_table(rows, out, len(test_ids))
+
+
+def write_final_table(rows, out, num_tokens):
+    """Render saved bootstrap summaries without loading or rescoring test predictions."""
+    out.mkdir(parents=True, exist_ok=True)
     with open(out / "final.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
 
-    markdown = _markdown(rows, len(test_ids))
+    markdown = _markdown(rows, num_tokens)
     (out / "final.md").write_text(markdown, encoding="utf-8")
     return markdown
 

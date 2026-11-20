@@ -15,12 +15,14 @@ from lm.disagreement import format_row, top_disagreements
 from lm.evaluation import RESULTS_DIR, predictions_path
 from lm.final_evaluation import ablation_dir
 from lm.rare_tokens import frequency_groups, rare_token_table, write_rare_token_table
+from lm.reproducibility import read_numeric_csv
 
 
 def main():
     parser = argparse.ArgumentParser(description="CE and top-1 accuracy by train frequency of the target word.")
     parser.add_argument("--results-dir", type=Path, default=RESULTS_DIR)
     parser.add_argument("--out", type=Path, default=RESULTS_DIR / "rare_tokens")
+    parser.add_argument("--report-only", action="store_true", help="render saved CSV; does not recompute scores or examples")
     args = parser.parse_args()
 
     # WikiText has characters that Windows' default encoding can't print to a file or pipe.
@@ -29,6 +31,10 @@ def main():
     vocab = load_vocab()
     test_ids = load_split("test")
     groups = frequency_groups(load_split("train"), test_ids, len(vocab), vocab.unk_id)
+    if args.report_only:
+        rows = read_numeric_csv(args.results_dir / "rare_tokens/rare_tokens.csv", {"model"})
+        print(write_rare_token_table(rows, groups, args.out))
+        return
     print(write_rare_token_table(rare_token_table(args.results_dir, groups), groups, args.out))
 
     transformer = predictions_path(ablation_dir(args.results_dir, 128, 0), "test")

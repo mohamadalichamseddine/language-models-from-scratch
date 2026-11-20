@@ -24,6 +24,7 @@ Needs a GPU (see notebooks/train_on_colab.ipynb):
     python scripts/sweep_transformer.py
 """
 
+import argparse
 import json
 import shutil
 import subprocess
@@ -144,6 +145,15 @@ def write_comparison(best):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--report-only", action="store_true", help="render saved sweep results without training or changing the frozen model")
+    args = parser.parse_args()
+    if args.report_only:
+        saved = read_json(SWEEP_DIR / "sweep.json")
+        best = next(run for run in saved["runs"] if run["run"] == saved["best_run"])
+        write_sweep_table(saved["runs"], best)
+        write_comparison(best)
+        return
     runs = [train_and_score(lr, dropout) for lr in LEARNING_RATES for dropout in DROPOUTS]
     best = min(runs, key=lambda run: run["valid_perplexity"])
 

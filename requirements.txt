@@ -1,9 +1,10 @@
 # Install from the repo root with: pip install -r requirements.txt
-# numpy is pinned to the version Colab uses, so results match on every machine
+# Direct dependencies tested with Python 3.12. Hardware can still change numerics.
+# Install a matching device-specific torch 2.14.0 wheel first when using a GPU.
 numpy==2.4.6
-torch>=2.6
-datasets>=3.0
-matplotlib>=3.8
-pytest>=8.0
+torch==2.14.0
+datasets==5.2.0
+matplotlib==3.11.2
+pytest==9.2.0
 
 -e .
