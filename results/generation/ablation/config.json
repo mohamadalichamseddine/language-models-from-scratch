@@ -1,0 +1,37 @@
+{
+  "split": "valid",
+  "config": {
+    "prompts": 30,
+    "prompt_length": 10,
+    "tokens": 100,
+    "seed": 42,
+    "temperature": 1.0,
+    "top_k": 50,
+    "contexts": [
+      6,
+      32,
+      64,
+      128
+    ],
+    "training_seeds": [
+      0,
+      1
+    ]
+  },
+  "data": {
+    "train_sha256": "d5163de236cc4b80fa5c2f2aa3b829899ae21d97700c96d1a459ac457e36574e",
+    "valid_sha256": "9b16c5b84685239c7af3673eb31ba6df93354547d5999780ec08a6b1f4d458b6",
+    "vocab_sha256": "3b29d858a7c2b02cc95199036534942be11939bc96c4b071ffdd223b06c2f6cf",
+    "train_tokens": 2088628,
+    "valid_tokens": 217646,
+    "vocab_size": 33278
+  },
+  "runtime": {
+    "python": "3.12.10",
+    "numpy": "2.4.6",
+    "torch": "2.14.0+rocm10.1.0",
+    "device": "cuda:1",
+    "device_name": "AMD Radeon RX 9070 XT"
+  },
+  "sampling": "N-grams: full distribution. Transformer: temperature and top-k. Fixed-length continuations include <eos>."
+}

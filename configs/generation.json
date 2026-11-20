@@ -1,0 +1,10 @@
+{
+  "prompts": 30,
+  "prompt_length": 10,
+  "tokens": 100,
+  "seed": 42,
+  "temperature": 1.0,
+  "top_k": 50,
+  "contexts": [6, 32, 64, 128],
+  "training_seeds": [0, 1]
+}
