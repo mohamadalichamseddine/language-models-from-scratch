@@ -14,27 +14,16 @@ from lm.disagreement import format_row, top_disagreements
 from lm.evaluation import RESULTS_DIR, predictions_path
 from lm.final_evaluation import ablation_dir
 from lm.long_context import CONTEXT_GROUPS, LONG, SHORT, context_groups, long_context_tables, write_long_context_tables
-from lm.reproducibility import read_numeric_csv
 
 
 def main():
     parser = argparse.ArgumentParser(description="Where a longer context helps: Transformer k=128 vs k=6 on test.")
     parser.add_argument("--results-dir", type=Path, default=RESULTS_DIR)
     parser.add_argument("--out", type=Path, default=RESULTS_DIR / "long_context")
-    parser.add_argument("--report-only", action="store_true", help="render saved CSV; does not recompute scores or examples")
     args = parser.parse_args()
 
     # WikiText has characters that Windows' default encoding can't print to a file or pipe.
     sys.stdout.reconfigure(encoding="utf-8")
-
-    if args.report_only:
-        rows = read_numeric_csv(args.results_dir / "long_context/long_context.csv", {"grouping", "group"}, {"tokens"})
-        tables = {}
-        for row in rows:
-            grouping = row.pop("grouping")
-            tables.setdefault(grouping, []).append(row)
-        print(write_long_context_tables(tables, args.out))
-        return
 
     vocab = load_vocab()
     test_ids = load_split("test")

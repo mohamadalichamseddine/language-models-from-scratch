@@ -13,7 +13,6 @@ import glob
 from pathlib import Path
 
 from lm.data import SPLITS, load_split
-from lm.ablation import read_json
 from lm.evaluation import evaluate_run, run_name, write_table
 
 
@@ -37,14 +36,13 @@ def main():
     parser.add_argument("runs", nargs="+", help="run folders, wildcards allowed (e.g. results/ngram/*)")
     parser.add_argument("--split", default="valid", choices=SPLITS, help="split to evaluate (default: valid)")
     parser.add_argument("--out", type=Path, required=True, help="table path without extension; writes .md and .csv")
-    parser.add_argument("--saved-metrics", action="store_true", help="render existing metrics.json; no prediction files needed")
     args = parser.parse_args()
 
     num_tokens = len(load_split(args.split))
 
     rows = []
     for run_dir in find_run_dirs(args.runs):
-        metrics = read_json(run_dir / "metrics.json")[args.split] if args.saved_metrics else evaluate_run(run_dir, args.split, num_tokens)
+        metrics = evaluate_run(run_dir, args.split, num_tokens)
         rows.append((run_name(run_dir), metrics))
 
     title = f"Metrics on the {args.split} split ({num_tokens:,} tokens)."

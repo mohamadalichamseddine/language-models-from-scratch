@@ -18,7 +18,7 @@ python -m pytest -q
 
 `pip install -r requirements.txt` also installs this repo's package (`src/lm`) in editable mode, so scripts and tests can `import lm` and pick up code changes without reinstalling.
 
-The requirements pin the tested direct dependency versions, including `torch==2.14.0`. For GPU use, install a matching platform-specific PyTorch 2.14.0 build before the requirements. A local build suffix (such as `+rocm10.1.0`) satisfies this pin. Check `torch.cuda.is_available()` and device names before choosing `--device`; CPU report reproduction needs no GPU.
+The requirements pin the tested direct dependency versions, including `torch==2.14.0`. For GPU use, install a matching platform-specific PyTorch 2.14.0 build before the requirements. A local build suffix (such as `+rocm10.1.0`) satisfies this pin. Check `torch.cuda.is_available()` and device names before choosing `--device`. Reproducing the results with `scripts/run_all.py` needs no GPU.
 
 For AMD GPUs, see the [ROCm setup notes](docs/context-ablation.md#setup-and-device-check).
 
@@ -55,117 +55,55 @@ docs/                 roadmap and notes
 
 Training uses `lm.utils.set_seed`; batch sampling and generation use explicitly seeded generators. Runs save their settings, but hardware and runtime differences can still produce small numerical differences. See the [context-ablation runbook](docs/context-ablation.md) for how much repeated scoring differs across runs and devices.
 
-## Reproduce the reports (T26)
+## Reproduce the results (T26)
 
-After installing requirements, run from the repository root:
+One command reruns every step after training, starting from the committed checkpoints:
 
 ```bash
 python scripts/run_all.py
 ```
 
-This prepares the committed raw data, runs the tests, rebuilds reports from saved
-metrics/samples, and bundles the public source. It does not train or score models.
-The run log is `results/reproducibility/run_all.json`; any failed command stops
-execution. `--skip-tests` skips only the tests. To also regenerate all T24 samples:
+It prepares the data, runs the tests, and then runs the scripts in the table below in order. Nothing is trained, and the test split is not scored again. On a CPU it takes about two hours, most of it scoring the Transformers. Options: `--device` (default: the GPU if there is one), `--batch-size` (default 64, which fits in laptop memory) and `--skip-tests`.
 
-```bash
-python scripts/run_all.py --regenerate-samples --device cpu
-```
+Every script writes into `results/`, so run it on a clean checkout and look at `git diff` afterwards. Scores computed on different hardware can change in the last digits: the T18 models were scored on an AMD GPU, and repeated scoring differs at rounding precision (see the [context-ablation runbook](docs/context-ablation.md)).
 
-Use `--device cuda:1` for the RX 9070 XT on the machine used for T18/T24, after
-checking the device list. See the [generation protocol and findings](docs/generation-analysis.md).
-Generation settings and seeds are frozen in `configs/generation.json`; the full
-samples, data fingerprints, checkpoint hashes and runtime are saved in
-`results/generation/ablation/`.
+The T21–T23 steps need the T21 test predictions (`results/t21_results.zip`, from the T21 Colab run, unzipped from the repo root). Without them `run_all` skips those three steps instead of scoring the test split again.
 
-The following commands rebuild every published table/figure from its recorded
-inputs. Paths in the first column are relative to `results/`. `--report-only`
-formats saved results: for T21 it preserves the existing bootstrap summaries;
-for T22/T23 it renders the existing numerical CSV. It does not independently
-recompute those scientific analyses. Recalculation commands are below the table.
-
-| Artifact | Exact command (from repository root) |
+| Results (under `results/`) | Command |
 |---|---|
-| `data_stats/stats.md`, `data_stats/zipf.png` | `python scripts/dataset_stats.py` |
-| `ngram/tuning.md`, `ngram/perplexity_vs_k.png` | `python scripts/run_ngram.py --report-only` |
-| `ngram/comparison.md`, `.csv` | `python scripts/evaluate.py "results/ngram/*" --saved-metrics --out results/ngram/comparison` |
-| `transformer/sweep/sweep.md`, `comparison.md`, `comparison.csv` | `python scripts/sweep_transformer.py --report-only` |
+| `data_stats/` | `python scripts/dataset_stats.py` |
+| `ngram/n*_k*/`, `ngram/tuning.md`, `ngram/perplexity_vs_k.png` | `python scripts/run_ngram.py` |
+| `ngram/interpolated/` | `python scripts/run_interpolated.py` |
+| `ngram/comparison.md`, `.csv` | `python scripts/evaluate.py "results/ngram/*" --out results/ngram/comparison` |
+| `transformer/best/metrics.json` | `python scripts/score_transformer.py --run transformer/best` |
+| `transformer/sweep/sweep.md`, `comparison.md`, `.csv` | `python scripts/sweep_transformer.py --report-only` |
 | `figures/comparison.md`, `.csv`, `perplexity.png`, `transformer_loss.png` | `python scripts/build_figures.py` |
+| `figures/disagreements.csv` | `python scripts/model_disagreement.py results/transformer/best/valid.npz results/ngram/n3_k0.001/valid.npz --split valid --top 20 --context 10 --out results/figures/disagreements.csv` |
+| `generation/samples.json` | `python scripts/generate.py` |
 | `generation/metrics.md`, `.csv` | `python scripts/generation_metrics.py` |
-| `context_truncation/ablation/k128_seed0/comparison.md`, `.csv` | `python scripts/score_context_truncation.py --run ablation/k128_seed0 --report-only` |
-| `context_truncation/ablation/k128_seed1/comparison.md`, `.csv` | `python scripts/score_context_truncation.py --run ablation/k128_seed1 --report-only` |
+| `ablation/k*_seed*/metrics.json` | `python scripts/run_ablation.py` |
+| `context_truncation/ablation/k128_seed0/` (and `seed1`) | `python scripts/score_context_truncation.py --run ablation/k128_seed0` |
 | `figures/ablation_*.png`, `ablation_runs.csv`, `ablation_summary.md`, `.csv` | `python scripts/plot_ablation.py` |
-| `final/final.md`, `.csv` | `python scripts/final_evaluation.py --report-only` |
-| `rare_tokens/rare_tokens.md`, `.csv` | `python scripts/rare_tokens.py --report-only` |
-| `long_context/long_context.md`, `.csv` | `python scripts/long_context.py --report-only` |
-| `generation/ablation/metrics.md`, `.csv`, `representative_samples.md` | `python scripts/generation_analysis.py --samples results/generation/ablation/samples.json` |
-| `figures/disagreements.csv` (requires validation predictions) | `python scripts/model_disagreement.py results/transformer/best/valid.npz results/ngram/n3_k0.001/valid.npz --split valid --top 20 --context 10 --out results/figures/disagreements.csv` |
+| `final/final.md`, `.csv` | `python scripts/final_evaluation.py` |
+| `rare_tokens/` | `python scripts/rare_tokens.py` |
+| `long_context/` | `python scripts/long_context.py` |
+| `generation/ablation/` | `python scripts/generation_analysis.py` |
 
-`run_all` runs the commands above except the disagreement export, which needs
-ignored per-token predictions. Training `curves.csv` files are source logs for
-figures, not reports that can be reconstructed from aggregate metrics.
+Notes on a few rows:
 
-### Recompute the underlying experiments
+- `sweep_transformer.py --report-only` rebuilds the sweep table from `results/transformer/sweep/sweep.json`, because only the best of the nine sweep models is committed.
+- `run_ablation.py` keeps runs whose training is complete (all eight are committed) and only scores them.
+- `final_evaluation.py` scores the test split for any model whose test predictions are missing. Restore `t21_results.zip` first so it only rebuilds the table. The bootstrap settings are in `results/final/config.json`.
 
-These are separate from report reproduction. The original frozen n-gram grid
-and selected values are in `results/ngram/tuning.json`; interpolation weights
-are in `results/ngram/interpolated/config.json`. To recreate their validation
-predictions and tuning results, use `python scripts/run_ngram.py` and
-`python scripts/run_interpolated.py`. These recompute the historical validation
-searches; do not change their grids or use test scores to select settings.
+### Training (not part of `run_all`)
 
-T13's original training/sweep command is `python scripts/sweep_transformer.py`.
-It can train nine models, replaces `results/transformer/best/`, and rewrites the
-frozen config. Use a separate experiment checkout if repeating it. All run
-settings, training seeds and curves are stored under `results/transformer/`.
-T18-T20 commands and their equal-budget policy are in the
-[context-ablation runbook](docs/context-ablation.md). The default eight-run command
-is `python scripts/run_ablation.py --config configs/transformer.json --contexts 6 32 64 128 --seeds 0 1 --device cpu`.
-To recreate T19 scores, run the two context-truncation commands above without
-`--report-only`, adding `--device cpu` or your checked GPU device.
+Training needs a GPU. The T13 sweep is `python scripts/sweep_transformer.py` (or [notebooks/train_on_colab.ipynb](notebooks/train_on_colab.ipynb)), and the T18 runs are described in the [context-ablation runbook](docs/context-ablation.md). Both write over the committed models, so use a separate checkout.
 
-To rebuild T14's original samples use `python scripts/generate.py --device cpu`;
-then run the generation-metrics command. To recreate T24's complete sample set
-use `python scripts/generation_analysis.py --config configs/generation.json --device cpu`.
-Fixed seeds reproduce sampling for identical probabilities; changed hardware,
-PyTorch builds or numerical libraries can change generated sequences.
+### Quick check from a fresh clone
 
-For T17, restore archived validation predictions, or recreate the n-gram
-validation predictions as above and run
-`python scripts/score_transformer.py --run transformer/best --split valid --device cpu`.
-Then run the disagreement command in the table.
-
-For T21-T23, restore the archived T21 predictions into their original run folders
-(the `results/t21_results.zip` download is ignored). With those predictions present,
-`python scripts/final_evaluation.py --device cpu` rebuilds the bootstrap table;
-`python scripts/rare_tokens.py` and `python scripts/long_context.py` recompute the
-analyses and print examples. The final evaluator scores any missing test files,
-so it is not a routine reproduction command for a fresh clone. Test scoring was
-already performed for T21 after freezing the models; do not retune against it.
-The bootstrap seed (0), block size (1,000), resamples (10,000), and model mapping
-are recorded in `results/final/config.json`.
-
-### Bundle source and verify a fresh clone
+After setup, this rebuilds the T24 generation table from the committed token ids in a few seconds. `git diff` should then show no changes:
 
 ```bash
-python scripts/bundle_source.py --out results/reproducibility/source_bundle.txt
+python scripts/generation_analysis.py --samples results/generation/ablation/samples.json
+git diff --stat
 ```
-
-The deterministic UTF-8 bundle includes Python under `src/`, `scripts/` and
-`tests/`, notebook code cells, JSON configs and packaging files. It omits notebook
-outputs, data, checkpoints, private documentation, environments and secrets.
-The generated bundle and machine-specific run log are ignored by Git.
-
-For a fresh-clone check, install requirements in a new virtual environment and run:
-
-```bash
-python scripts/generation_analysis.py --samples results/generation/ablation/samples.json --out results/reproduced-generation
-python -c "from pathlib import Path; a=Path('results/generation/ablation/metrics.csv'); b=Path('results/reproduced-generation/metrics.csv'); assert a.read_bytes()==b.read_bytes(); print('Generation table matches exactly')"
-python scripts/run_all.py
-```
-
-The table check recomputes all three metrics from the committed token IDs, with
-no prepared dataset, model checkpoint loading or GPU required. See
-[the verification record](results/reproducibility/verification.json) for the
-actual environment and checks completed. Automated verification is recorded
-separately from the roadmap's final teammate reproduction sign-off.

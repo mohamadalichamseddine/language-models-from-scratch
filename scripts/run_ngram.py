@@ -11,7 +11,6 @@ comparison table across all runs then comes from:
     python scripts/evaluate.py results/ngram/* --out results/ngram/comparison
 """
 
-import argparse
 import json
 
 import matplotlib.pyplot as plt
@@ -66,7 +65,7 @@ def write_report(tuning, path):
         "| k | " + " | ".join(name.capitalize() for name in names) + " |",
         "|---|" + "---|" * len(names),
     ]
-    for i, k in enumerate(tuning["k_grid"]):
+    for i, k in enumerate(K_GRID):
         cells = []
         for name in names:
             cell = f"{perplexity[name][i]:.2f}"
@@ -92,7 +91,7 @@ def plot_perplexity(tuning, path):
 
     for name, color in COLORS.items():
         values = tuning["valid_perplexity"][name]
-        ax.plot(tuning["k_grid"], values, color=color, linewidth=1.5, marker="o", markersize=4,
+        ax.plot(K_GRID, values, color=color, linewidth=1.5, marker="o", markersize=4,
                 markeredgecolor="white", markeredgewidth=0.8, label=name.capitalize())
 
         # Mark and label the best k. The unigram line is flat and its best k sits
@@ -130,14 +129,6 @@ def plot_perplexity(tuning, path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--report-only", action="store_true", help="render frozen tuning.json without tuning or scoring")
-    args = parser.parse_args()
-    if args.report_only:
-        tuning = json.loads((NGRAM_DIR / "tuning.json").read_text(encoding="utf-8"))
-        write_report(tuning, NGRAM_DIR / "tuning.md")
-        plot_perplexity(tuning, NGRAM_DIR / "perplexity_vs_k.png")
-        return
     train_ids = load_split("train")
     valid_ids = load_split("valid")
     vocab_size = len(load_vocab())
